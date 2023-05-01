@@ -1,4 +1,4 @@
-package ru.practicum.shareit.request.dto;
+package ru.practicum.shareit.request.model;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -6,7 +6,6 @@ import lombok.Data;
 import lombok.experimental.FieldDefaults;
 import ru.practicum.shareit.user.model.User;
 
-import java.sql.Timestamp;
 import java.time.OffsetDateTime;
 
 /**
@@ -15,7 +14,7 @@ import java.time.OffsetDateTime;
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @AllArgsConstructor
-public class ItemRequestDto {
+public class ItemRequest {
 
     Long id;
 
@@ -23,5 +22,5 @@ public class ItemRequestDto {
 
     User requestor;
 
-    Timestamp created;
+    OffsetDateTime created;
 }
