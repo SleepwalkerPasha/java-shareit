@@ -7,7 +7,6 @@ import lombok.experimental.FieldDefaults;
 import ru.practicum.shareit.user.model.User;
 
 import java.sql.Timestamp;
-import java.time.OffsetDateTime;
 
 /**
  * TODO Sprint add-item-requests.
