@@ -14,8 +14,7 @@ public class InMemoryItemRepository implements ItemRepository {
 
     private final HashMap<Long, ItemDto> itemMap = new HashMap<>();
 
-
-    private static long counter = 0L;
+    private long counter = 0L;
 
     @Override
     public ItemDto addItem(ItemDto item) {

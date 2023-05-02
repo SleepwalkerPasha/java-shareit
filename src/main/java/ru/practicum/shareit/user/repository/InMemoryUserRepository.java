@@ -21,7 +21,7 @@ public class InMemoryUserRepository implements UserRepository {
 
     private final Set<String> emails = new HashSet<>();
 
-    private static long counter = 0L;
+    private long counter = 0L;
 
     @Override
     public UserDto addUser(UserDto user) {
