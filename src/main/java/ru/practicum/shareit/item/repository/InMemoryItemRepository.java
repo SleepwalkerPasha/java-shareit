@@ -37,7 +37,11 @@ public class InMemoryItemRepository implements ItemRepository {
 
     @Override
     public List<ItemDto> getItemsByDescription(String description) {
-        return itemMap.values().stream().filter(x -> x.getDescription().toLowerCase().contains(description) && x.getAvailable().equals(true)).collect(Collectors.toList());
+        return itemMap
+                .values()
+                .stream()
+                .filter(x -> x.getDescription().toLowerCase().contains(description) && x.getAvailable().equals(true))
+                .collect(Collectors.toList());
     }
 
 }

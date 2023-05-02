@@ -3,6 +3,7 @@ package ru.practicum.shareit.user.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.exception.NotFoundException;
+import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.mapper.UserMapper;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.repository.UserRepository;
@@ -33,7 +34,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Optional<User> getUserById(long id) {
-        return Optional.of(UserMapper.toUser(userRepository.getUserById(id).get()));
+        Optional<UserDto> userDto = userRepository.getUserById(id);
+        if (userDto.isEmpty())
+            throw new NotFoundException("нет такого юзера");
+        return Optional.of(UserMapper.toUser(userDto.get()));
     }
 
     @Override
@@ -43,7 +47,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<User> getAll() {
-        return userRepository.getAll().stream().map(UserMapper::toUser).collect(Collectors.toList());
+        return userRepository
+                .getAll()
+                .stream()
+                .map(UserMapper::toUser)
+                .collect(Collectors.toList());
     }
 
     private User updateUserNameAndEmail(User newUser, User oldUser) {

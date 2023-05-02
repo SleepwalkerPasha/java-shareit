@@ -35,22 +35,22 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public Item updateItem(Item item, long itemId, long userId) {
-        checkItemUpdate(item);
+        checkNewItem(item);
         UserDto userDto = userRepository.checkForUser(userId);
         Optional<ItemDto> oldItemOpt = userDto.getItemById(itemId);
+
         if (oldItemOpt.isEmpty())
             throw new NotFoundException(String.format("итема с таким id = %d нет у юзера %d", itemId, userId));
         if (!oldItemOpt.get().getOwner().equals(userId))
             throw new ConflictException("у этого юзера нет прав для изменения этого итема");
 
-        Item oldItem = ItemMapper.toItem(oldItemOpt.get());
-        ItemDto itemDto = ItemMapper.toItemDto(updateItemsValues(item, oldItem));
+        ItemDto itemDto = updateItemsValues(ItemMapper.toItemDto(item), oldItemOpt.get());
         userDto.updateItem(itemDto);
         itemRepository.updateItem(itemDto);
         return ItemMapper.toItem(itemDto);
     }
 
-    private void checkItemUpdate(Item item) {
+    private void checkNewItem(Item item) {
         if ((item.getName() != null && item.getName().isBlank()) || (item.getDescription() != null && item.getDescription().isBlank()))
             throw new IllegalArgumentException("описание и название итема не могут быть пустыми");
     }
@@ -63,17 +63,25 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public List<Item> getAllUserItems(long userId) {
         UserDto userDto = userRepository.checkForUser(userId);
-        return userDto.getItems().stream().map(ItemMapper::toItem).collect(Collectors.toList());
+        return userDto
+                .getItems()
+                .stream()
+                .map(ItemMapper::toItem)
+                .collect(Collectors.toList());
     }
 
     @Override
     public List<Item> getItemByDescription(String description, long userId) {
         if (description.isBlank())
             return new ArrayList<>();
-        return itemRepository.getItemsByDescription(description.toLowerCase()).stream().map(ItemMapper::toItem).collect(Collectors.toList());
+        return itemRepository
+                .getItemsByDescription(description.toLowerCase())
+                .stream()
+                .map(ItemMapper::toItem)
+                .collect(Collectors.toList());
     }
 
-    private Item updateItemsValues(Item newItem, Item oldItem) {
+    private ItemDto updateItemsValues(ItemDto newItem, ItemDto oldItem) {
         if (newItem.getDescription() != null && !newItem.getDescription().equals(oldItem.getDescription()))
             oldItem.setDescription(newItem.getDescription());
         if (newItem.getName() != null && !newItem.getName().equals(oldItem.getName()))
