@@ -9,9 +9,6 @@ import ru.practicum.shareit.user.model.User;
 
 import java.sql.Timestamp;
 
-/**
- * TODO Sprint add-bookings.
- */
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @AllArgsConstructor

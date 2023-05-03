@@ -17,5 +17,4 @@ public interface UserRepository {
 
     List<UserDto> getAll();
 
-    UserDto checkForUser(long userId);
 }

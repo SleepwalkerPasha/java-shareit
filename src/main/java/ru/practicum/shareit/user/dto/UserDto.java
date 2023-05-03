@@ -8,7 +8,6 @@ import lombok.experimental.FieldDefaults;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.item.dto.ItemDto;
 
-import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -21,10 +20,8 @@ public class UserDto {
 
     Long id;
 
-    @NotNull
     String name;
 
-    @NotNull
     String email;
 
     List<ItemDto> items = new ArrayList<>();

@@ -27,7 +27,7 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public Item addItem(Item item, long userId) {
         item.setOwner(userId);
-        UserDto userDto = userRepository.checkForUser(userId);
+        UserDto userDto = checkForUser(userId);
         ItemDto itemDto = itemRepository.addItem(ItemMapper.toItemDto(item));
         userDto.addItem(itemDto);
         return ItemMapper.toItem(itemDto);
@@ -36,7 +36,7 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public Item updateItem(Item item, long itemId, long userId) {
         checkNewItem(item);
-        UserDto userDto = userRepository.checkForUser(userId);
+        UserDto userDto = checkForUser(userId);
         Optional<ItemDto> oldItemOpt = userDto.getItemById(itemId);
 
         if (oldItemOpt.isEmpty())
@@ -62,7 +62,7 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public List<Item> getAllUserItems(long userId) {
-        UserDto userDto = userRepository.checkForUser(userId);
+        UserDto userDto = checkForUser(userId);
         return userDto
                 .getItems()
                 .stream()
@@ -89,5 +89,13 @@ public class ItemServiceImpl implements ItemService {
         if (newItem.getAvailable() != null && !newItem.getAvailable().equals(oldItem.getAvailable()))
             oldItem.setAvailable(newItem.getAvailable());
         return oldItem;
+    }
+
+    private UserDto checkForUser(long userId) {
+        Optional<UserDto> userById = userRepository.getUserById(userId);
+        if (userById.isEmpty())
+            throw new NotFoundException("такого пользователя нет");
+        else
+            return userById.get();
     }
 }

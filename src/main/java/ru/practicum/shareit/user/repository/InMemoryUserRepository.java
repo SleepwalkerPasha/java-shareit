@@ -25,22 +25,22 @@ public class InMemoryUserRepository implements UserRepository {
 
     @Override
     public UserDto addUser(UserDto user) {
-        if (emails.contains(user.getEmail()))
+        if (emails.contains(user.getEmail().toLowerCase()))
             throw new ConflictException("пользователь с данным email уже зарегистрирован");
         user.setId(++counter);
-        emails.add(user.getEmail());
-        userMap.putIfAbsent(user.getId(), user);
+        emails.add(user.getEmail().toLowerCase());
+        userMap.put(user.getId(), user);
         return user;
     }
 
     @Override
     public UserDto updateUser(UserDto updatedUser, long userId) {
         UserDto oldUserData = checkForUser(userId);
-        if (emails.contains(updatedUser.getEmail()) && !oldUserData.getEmail().equals(updatedUser.getEmail()))
+        if (emails.contains(updatedUser.getEmail().toLowerCase()) && !oldUserData.getEmail().equalsIgnoreCase(updatedUser.getEmail()))
             throw new ConflictException("данный email уже занят другим пользователем");
         userMap.put(userId, updatedUser);
-        emails.remove(oldUserData.getEmail());
-        emails.add(updatedUser.getEmail());
+        emails.remove(oldUserData.getEmail().toLowerCase());
+        emails.add(updatedUser.getEmail().toLowerCase());
         return updatedUser;
     }
 
@@ -52,7 +52,7 @@ public class InMemoryUserRepository implements UserRepository {
     @Override
     public void deleteUser(long userId) {
         UserDto userDto = checkForUser(userId);
-        emails.remove(userDto.getEmail());
+        emails.remove(userDto.getEmail().toLowerCase());
         userMap.remove(userId);
     }
 
@@ -61,8 +61,7 @@ public class InMemoryUserRepository implements UserRepository {
         return new ArrayList<>(userMap.values());
     }
 
-    @Override
-    public UserDto checkForUser(long userId) {
+    private UserDto checkForUser(long userId) {
         Optional<UserDto> userById = getUserById(userId);
         if (userById.isEmpty())
             throw new NotFoundException("такого пользователя нет");

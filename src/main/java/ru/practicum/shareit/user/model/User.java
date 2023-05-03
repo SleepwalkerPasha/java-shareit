@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.springframework.lang.Nullable;
 import ru.practicum.shareit.item.model.Item;
 
 import javax.validation.constraints.Email;
@@ -22,16 +21,14 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class User {
 
-    @Nullable
     Long id;
 
-    @NotNull
+    @NotNull(groups = BasicInfo.class)
     String name;
 
-    @Email
-    @NotNull
+    @Email(groups = {BasicInfo.class, AdvanceInfo.class})
+    @NotNull(groups = BasicInfo.class)
     String email;
 
-    @Nullable
     List<Item> items = new ArrayList<>();
 }

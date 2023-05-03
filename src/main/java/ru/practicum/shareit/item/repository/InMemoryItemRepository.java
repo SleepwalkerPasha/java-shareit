@@ -19,7 +19,7 @@ public class InMemoryItemRepository implements ItemRepository {
     @Override
     public ItemDto addItem(ItemDto item) {
         item.setId(++counter);
-        itemMap.putIfAbsent(item.getId(), item);
+        itemMap.put(item.getId(), item);
         return item;
     }
 

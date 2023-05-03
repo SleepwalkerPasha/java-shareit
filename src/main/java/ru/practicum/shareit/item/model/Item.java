@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.springframework.lang.Nullable;
 import ru.practicum.shareit.request.model.ItemRequest;
 
 import javax.validation.constraints.NotBlank;
@@ -20,17 +19,17 @@ import javax.validation.constraints.NotNull;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Item {
 
-    @Nullable
     Long id;
 
-    @NotNull
-    @NotBlank
+    @NotNull(groups = BasicInfo.class)
+    @NotBlank(groups = BasicInfo.class)
     String name;
 
-    @NotNull
+    @NotNull(groups = BasicInfo.class)
+    @NotBlank(groups = BasicInfo.class)
     String description;
 
-    @NotNull
+    @NotNull(groups = BasicInfo.class)
     Boolean available;
 
     Long owner;
