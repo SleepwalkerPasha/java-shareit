@@ -1,4 +1,4 @@
-package ru.practicum.shareit.booking.dto;
+package ru.practicum.shareit.booking.model;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -7,22 +7,26 @@ import lombok.experimental.FieldDefaults;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.model.User;
 
-import java.sql.Timestamp;
+import java.time.OffsetDateTime;
+
+/**
+ * TODO Sprint add-bookings.
+ */
 
 @Data
-@FieldDefaults(level = AccessLevel.PRIVATE)
 @AllArgsConstructor
-public class BookingDto {
+@FieldDefaults(level = AccessLevel.PRIVATE)
+public class Booking {
+
     Long id;
 
-    Timestamp start;
+    OffsetDateTime start;
 
-    Timestamp end;
+    OffsetDateTime end;
 
     Item item;
 
     User booker;
 
-    String status;
-
+    BookingStatus status;
 }
