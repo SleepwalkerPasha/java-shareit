@@ -8,9 +8,6 @@ import ru.practicum.shareit.user.model.User;
 
 import java.time.OffsetDateTime;
 
-/**
- * TODO Sprint add-item-requests.
- */
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @AllArgsConstructor

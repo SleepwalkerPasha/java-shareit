@@ -9,10 +9,6 @@ import ru.practicum.shareit.user.model.User;
 
 import java.time.OffsetDateTime;
 
-/**
- * TODO Sprint add-bookings.
- */
-
 @Data
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)

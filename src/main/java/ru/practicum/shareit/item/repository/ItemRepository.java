@@ -3,6 +3,7 @@ package ru.practicum.shareit.item.repository;
 import ru.practicum.shareit.item.dto.ItemDto;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ItemRepository {
 
@@ -10,7 +11,7 @@ public interface ItemRepository {
 
     ItemDto updateItem(ItemDto item);
 
-    ItemDto getItem(long item);
+    Optional<ItemDto> getItem(long itemId);
 
     List<ItemDto> getItemsByDescription(String description);
 }
