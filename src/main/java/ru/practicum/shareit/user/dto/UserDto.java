@@ -30,24 +30,4 @@ public class UserDto {
 
     String email;
 
-//    List<ItemDto> items = new ArrayList<>();
-
-//    public void addItem(ItemDto item) {
-//        items.add(item);
-//    }
-//
-//    public void updateItem(ItemDto itemDto) {
-//        Optional<ItemDto> dtoOptional = getItemById(itemDto.getId());
-//        if (dtoOptional.isEmpty())
-//            throw new NotFoundException("нет итема в списке с таким id " + itemDto.getId());
-//        items.set(items.indexOf(dtoOptional.get()), itemDto);
-//    }
-//
-//    public Optional<ItemDto> getItemById(long id) {
-//        return items.stream().filter(x -> x.getId().equals(id)).findFirst();
-//    }
-//
-//    public List<ItemDto> getItems() {
-//        return items;
-//    }
 }

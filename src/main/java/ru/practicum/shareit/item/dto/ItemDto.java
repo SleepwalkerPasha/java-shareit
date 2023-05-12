@@ -5,9 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import ru.practicum.shareit.request.model.ItemRequest;
+import ru.practicum.shareit.request.dto.ItemRequestDto;
 import ru.practicum.shareit.user.dto.UserDto;
-import ru.practicum.shareit.user.model.User;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -45,5 +44,7 @@ public class ItemDto {
     @ManyToOne
     UserDto owner;
 
-//    ItemRequest itemRequest;
+    @JoinColumn(name = "request_id")
+    @ManyToOne
+    ItemRequestDto itemRequest;
 }
