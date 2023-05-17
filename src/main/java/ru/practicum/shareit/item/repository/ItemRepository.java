@@ -14,4 +14,6 @@ public interface ItemRepository {
     Optional<ItemDto> getItem(long itemId);
 
     List<ItemDto> getItemsByDescription(String description);
+
+    List<ItemDto> getUserItemsByUserId(long userId);
 }

@@ -10,6 +10,7 @@ import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.user.dto.UserDto;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -43,7 +44,7 @@ public class BookingDto {
     @ManyToOne
     UserDto booker;
 
-    @Enumerated
+    @Enumerated(value = EnumType.STRING)
     BookingStatus status;
 
 }

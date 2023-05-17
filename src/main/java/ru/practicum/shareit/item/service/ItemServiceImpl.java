@@ -9,6 +9,7 @@ import ru.practicum.shareit.item.mapper.ItemMapper;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.repository.ItemRepository;
 import ru.practicum.shareit.user.dto.UserDto;
+import ru.practicum.shareit.user.mapper.UserMapper;
 import ru.practicum.shareit.user.repository.UserRepository;
 
 import java.util.ArrayList;
@@ -26,26 +27,24 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public Item addItem(Item item, long userId) {
-        item.setOwner(userId);
         UserDto userDto = checkForUser(userId);
+        item.setOwner(UserMapper.toUser(userDto));
         ItemDto itemDto = itemRepository.addItem(ItemMapper.toItemDto(item));
-        userDto.addItem(itemDto);
         return ItemMapper.toItem(itemDto);
     }
 
     @Override
     public Item updateItem(Item item, long itemId, long userId) {
         checkNewItem(item);
-        UserDto userDto = checkForUser(userId);
-        Optional<ItemDto> oldItemOpt = userDto.getItemById(itemId);
+        checkForUser(userId);
+        Optional<ItemDto> oldItemOpt = itemRepository.getItem(itemId);
 
         if (oldItemOpt.isEmpty())
             throw new NotFoundException(String.format("итема с таким id = %d нет у юзера %d", itemId, userId));
-        if (!oldItemOpt.get().getOwner().equals(userId))
+        if (!oldItemOpt.get().getOwner().getId().equals(userId))
             throw new ConflictException("у этого юзера нет прав для изменения этого итема");
 
         ItemDto itemDto = updateItemsValues(ItemMapper.toItemDto(item), oldItemOpt.get());
-        userDto.updateItem(itemDto);
         itemRepository.updateItem(itemDto);
         return ItemMapper.toItem(itemDto);
     }
@@ -57,14 +56,14 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public Optional<Item> getItem(long itemId, long userId) {
-        return Optional.of(ItemMapper.toItem(itemRepository.getItem(itemId)));
+        Optional<ItemDto> itemDto = itemRepository.getItem(itemId);
+        return itemDto.map(ItemMapper::toItem);
     }
 
     @Override
     public List<Item> getAllUserItems(long userId) {
-        UserDto userDto = checkForUser(userId);
-        return userDto
-                .getItems()
+        checkForUser(userId);
+        return itemRepository.getUserItemsByUserId(userId)
                 .stream()
                 .map(ItemMapper::toItem)
                 .collect(Collectors.toList());

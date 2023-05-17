@@ -2,6 +2,8 @@ package ru.practicum.shareit.item.mapper;
 
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.request.mapper.ItemReqMapper;
+import ru.practicum.shareit.user.mapper.UserMapper;
 
 public class ItemMapper {
 
@@ -12,11 +14,11 @@ public class ItemMapper {
         if (itemDto.getDescription() != null)
             item.setDescription(itemDto.getDescription());
         if (itemDto.getItemRequest() != null)
-            item.setRequest(itemDto.getItemRequest());
+            item.setRequest(ItemReqMapper.toItemRequest(itemDto.getItemRequest()));
         if (itemDto.getAvailable() != null)
             item.setAvailable(itemDto.getAvailable());
         if (itemDto.getOwner() != null)
-            item.setOwner(itemDto.getOwner());
+            item.setOwner(UserMapper.toUser(itemDto.getOwner()));
         if (itemDto.getName() != null)
             item.setName(itemDto.getName());
         return item;
@@ -29,11 +31,11 @@ public class ItemMapper {
         if (item.getDescription() != null)
             itemDto.setDescription(item.getDescription());
         if (item.getRequest() != null)
-            itemDto.setItemRequest(item.getRequest());
+            itemDto.setItemRequest(ItemReqMapper.toItemRequestDto(item.getRequest()));
         if (item.getAvailable() != null)
             itemDto.setAvailable(item.getAvailable());
         if (item.getOwner() != null)
-            itemDto.setOwner(item.getOwner());
+            itemDto.setOwner(UserMapper.toUserDto(item.getOwner()));
         if (item.getName() != null)
             itemDto.setName(item.getName());
         return itemDto;
