@@ -8,7 +8,7 @@ import lombok.experimental.FieldDefaults;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.model.User;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
@@ -18,9 +18,9 @@ public class Booking {
 
     Long id;
 
-    Instant start;
+    LocalDateTime start;
 
-    Instant end;
+    LocalDateTime end;
 
     Item item;
 

@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import ru.practicum.shareit.user.model.User;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
 
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
@@ -21,5 +21,5 @@ public class ItemRequest {
 
     User requestor;
 
-    Instant created;
+    LocalDateTime created;
 }

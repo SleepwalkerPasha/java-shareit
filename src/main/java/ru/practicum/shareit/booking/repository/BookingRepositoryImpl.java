@@ -3,7 +3,6 @@ package ru.practicum.shareit.booking.repository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import ru.practicum.shareit.booking.dto.BookingDto;
-import ru.practicum.shareit.booking.model.BookingState;
 
 import java.util.List;
 import java.util.Optional;
@@ -16,26 +15,84 @@ public class BookingRepositoryImpl implements BookingRepository {
 
     @Override
     public BookingDto addBooking(long userId, BookingDto booking) {
-        return null;
+        return jpaBookingRepository.save(booking);
     }
 
     @Override
-    public BookingDto approveBooking(long userId, long bookingId, boolean approved) {
-        return null;
+    public BookingDto approveBooking(BookingDto bookingDto) {
+        return jpaBookingRepository.save(bookingDto);
     }
 
     @Override
-    public Optional<BookingDto> getBookingById(long userId, long bookingId) {
-        return Optional.empty();
+    public Optional<BookingDto> getBookingByIdOfUserId(long userId, long bookingId) {
+        return jpaBookingRepository.findBookingDtoByBookerId(userId, bookingId);
     }
 
     @Override
-    public List<BookingDto> getBookingsByUserId(long userId, BookingState state) {
-        return null;
+    public Optional<BookingDto> getBookingByIdOfOwnerId(long ownerId, long bookingId) {
+        return jpaBookingRepository.findBookingDtoByOwnerId(ownerId, bookingId);
+    }
+
+
+    @Override
+    public List<BookingDto> getPastBookingsByOwnerId(long ownerId) {
+        return jpaBookingRepository.findAllPastOwnerBookings(ownerId);
     }
 
     @Override
-    public List<BookingDto> getAllBookingsOfUser(long ownerId, BookingState state) {
-        return null;
+    public List<BookingDto> getCurrentBookingsByOwnerId(long ownerId) {
+        return jpaBookingRepository.findAllCurrentOwnerBookings(ownerId);
     }
+
+    @Override
+    public List<BookingDto> getAllBookingsByOwnerId(long ownerId) {
+        return jpaBookingRepository.findAllByItemOwner_IdOrderByStart_date(ownerId);
+    }
+
+    @Override
+    public List<BookingDto> getFutureBookingsByOwnerId(long ownerId) {
+        return jpaBookingRepository.findAllFutureOwnerBookings(ownerId);
+    }
+
+    @Override
+    public List<BookingDto> getWaitingBookingsByOwnerId(long ownerId) {
+        return jpaBookingRepository.findAllWaitingOwnerBookings(ownerId);
+    }
+
+    @Override
+    public List<BookingDto> getRejectedBookingsByOwnerId(long ownerId) {
+        return jpaBookingRepository.findAllRejectedOwnerBookings(ownerId);
+    }
+
+    @Override
+    public List<BookingDto> getPastBookingsByUserId(long userId) {
+        return jpaBookingRepository.findAllPastBookings(userId);
+    }
+
+    @Override
+    public List<BookingDto> getCurrentBookingsByUserId(long userId) {
+        return jpaBookingRepository.findAllCurrentBookings(userId);
+    }
+
+    @Override
+    public List<BookingDto> getAllBookingsByUserId(long userId) {
+        return jpaBookingRepository.findAllByBooker_IdOrderByStart_date(userId);
+    }
+
+    @Override
+    public List<BookingDto> getFutureBookingsByUserId(long userId) {
+        return jpaBookingRepository.findAllFutureBookings(userId);
+    }
+
+    @Override
+    public List<BookingDto> getWaitingBookingsByUserId(long userId) {
+        return jpaBookingRepository.findAllWaitingBookings(userId);
+    }
+
+    @Override
+    public List<BookingDto> getRejectedBookingsByUserId(long userId) {
+        return jpaBookingRepository.findAllRejectedBookings(userId);
+    }
+
+
 }

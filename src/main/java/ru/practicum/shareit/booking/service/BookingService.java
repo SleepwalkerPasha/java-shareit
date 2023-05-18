@@ -9,11 +9,11 @@ public interface BookingService {
 
     Booking addBooking(long userId, Booking booking);
 
-    Booking approveBooking(long userId, long bookingId, boolean approved);
+    Booking approveBooking(long ownerId, long bookingId, boolean approved);
 
     Booking getBookingById(long userId, long bookingId);
 
     List<Booking> getBookingsByUserId(long userId, BookingState state);
 
-    List<Booking> getAllBookingsOfUser(long ownerId, BookingState state);
+    List<Booking> getBookingsByOwnerId(long ownerId, BookingState state);
 }

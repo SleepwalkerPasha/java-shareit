@@ -15,7 +15,7 @@ public class ItemReqMapper {
         if (itemRequestDto.getDescription() != null)
             itemRequest.setDescription(itemRequestDto.getDescription());
         if (itemRequestDto.getCreated() != null)
-            itemRequest.setCreated(itemRequestDto.getCreated().toInstant());
+            itemRequest.setCreated(itemRequestDto.getCreated().toLocalDateTime());
         if (itemRequestDto.getRequestor() != null)
             itemRequest.setRequestor(UserMapper.toUser(itemRequestDto.getRequestor()));
         return itemRequest;
@@ -28,7 +28,7 @@ public class ItemReqMapper {
         if (itemRequest.getDescription() != null)
             itemRequestDto.setDescription(itemRequest.getDescription());
         if (itemRequest.getCreated() != null)
-            itemRequestDto.setCreated(Timestamp.from(itemRequest.getCreated()));
+            itemRequestDto.setCreated(Timestamp.valueOf(itemRequest.getCreated()));
         if (itemRequest.getRequestor() != null)
             itemRequestDto.setRequestor(UserMapper.toUserDto(itemRequest.getRequestor()));
         return itemRequestDto;
