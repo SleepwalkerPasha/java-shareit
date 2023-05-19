@@ -31,11 +31,11 @@ public class BookingDto {
     Timestamp end_date;
 
     @JoinColumn(name = "item_id")
-    @ManyToOne
+    @ManyToOne(targetEntity = ItemDto.class)
     ItemDto item;
 
     @JoinColumn(name = "booker_id")
-    @ManyToOne
+    @ManyToOne(targetEntity = UserDto.class)
     UserDto booker;
 
     @Enumerated(value = EnumType.STRING)

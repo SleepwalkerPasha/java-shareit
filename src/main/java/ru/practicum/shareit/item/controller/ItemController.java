@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.item.model.BasicInfo;
+import ru.practicum.shareit.item.model.Comment;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.service.ItemService;
 
@@ -38,10 +39,8 @@ public class ItemController {
 
     @GetMapping("/{itemId}")
     public Item getItem(@PathVariable long itemId, @RequestHeader(name = "X-Sharer-User-Id") long userId) {
-        Optional<Item> item = service.getItem(itemId, userId);
-        if (item.isEmpty())
-            throw new NotFoundException(String.format("итема с таким id = %d нет", itemId));
-        return item.get();
+        Item item = service.getItem(itemId, userId);
+        return item;
     }
 
     @GetMapping
@@ -52,5 +51,10 @@ public class ItemController {
     @GetMapping("/search")
     public List<Item> getItemByDescription(@RequestParam(name = "text") String text, @RequestHeader(name = "X-Sharer-User-Id") long userId) {
         return service.getItemByDescription(text, userId);
+    }
+
+    @PostMapping("/{itemId}/comment")
+    public Comment addCommentToItem(@PathVariable long itemId, @RequestHeader(name = "X-Sharer-User-Id") long userId, @RequestBody Comment comment) {
+        return service.addCommentToItem(itemId, userId, comment);
     }
 }

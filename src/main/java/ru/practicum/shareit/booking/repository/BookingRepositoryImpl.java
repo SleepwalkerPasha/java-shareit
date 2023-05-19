@@ -29,6 +29,11 @@ public class BookingRepositoryImpl implements BookingRepository {
     }
 
     @Override
+    public Optional<BookingDto> getBookingByItemIdAndUserId(long userId, long itemId) {
+        return jpaBookingRepository.findBookingByUserIdAndItemId(userId, itemId);
+    }
+
+    @Override
     public Optional<BookingDto> getBookingByIdOfOwnerId(long ownerId, long bookingId) {
         return jpaBookingRepository.findBookingDtoByOwnerId(ownerId, bookingId);
     }
@@ -46,7 +51,7 @@ public class BookingRepositoryImpl implements BookingRepository {
 
     @Override
     public List<BookingDto> getAllBookingsByOwnerId(long ownerId) {
-        return jpaBookingRepository.findAllByItemOwner_IdOrderByStart_date(ownerId);
+        return jpaBookingRepository.findAllByOwnerId(ownerId);
     }
 
     @Override
@@ -76,7 +81,7 @@ public class BookingRepositoryImpl implements BookingRepository {
 
     @Override
     public List<BookingDto> getAllBookingsByUserId(long userId) {
-        return jpaBookingRepository.findAllByBooker_IdOrderByStart_date(userId);
+        return jpaBookingRepository.findAllByBookerId(userId);
     }
 
     @Override
@@ -92,6 +97,11 @@ public class BookingRepositoryImpl implements BookingRepository {
     @Override
     public List<BookingDto> getRejectedBookingsByUserId(long userId) {
         return jpaBookingRepository.findAllRejectedBookings(userId);
+    }
+
+    @Override
+    public Optional<BookingDto> getLastBookingByItemId(long itemId) {
+        return jpaBookingRepository.findLastBooking(itemId);
     }
 
 

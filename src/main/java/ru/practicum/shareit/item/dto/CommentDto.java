@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import ru.practicum.shareit.request.dto.ItemRequestDto;
 import ru.practicum.shareit.user.dto.UserDto;
 
 import javax.persistence.Column;
@@ -16,36 +15,31 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import java.sql.Timestamp;
 
-/**
- * TODO Sprint add-controllers.
- */
 @Data
-@FieldDefaults(level = AccessLevel.PRIVATE)
 @AllArgsConstructor
 @NoArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
-@Table(name = "items")
-public class ItemDto {
+@Table(name = "comments")
+public class CommentDto {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
-    @Column(name = "item_name")
-    String name;
+    @Column(name = "text")
+    String text;
 
-    String description;
+    @JoinColumn(name = "item_id")
+    @ManyToOne(targetEntity = ItemDto.class)
+    ItemDto itemDto;
 
-    @Column(name = "is_available")
-    Boolean available;
-
-    @JoinColumn(name = "owner_id")
+    @JoinColumn(name = "author_id")
     @ManyToOne(targetEntity = UserDto.class)
-    UserDto owner;
+    UserDto authorDto;
 
-    @JoinColumn(name = "request_id")
-    @ManyToOne(targetEntity = ItemRequestDto.class)
-    ItemRequestDto itemRequest;
-    
+    @Column(name = "created")
+    Timestamp created;
 }

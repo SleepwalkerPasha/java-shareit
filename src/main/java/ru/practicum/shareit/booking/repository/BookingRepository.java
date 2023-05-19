@@ -13,6 +13,8 @@ public interface BookingRepository {
 
     Optional<BookingDto> getBookingByIdOfUserId(long userId, long bookingId);
 
+    Optional<BookingDto> getBookingByItemIdAndUserId(long userId, long itemId);
+
     Optional<BookingDto> getBookingByIdOfOwnerId(long ownerId, long bookingId);
 
     List<BookingDto> getPastBookingsByOwnerId(long ownerId);
@@ -38,4 +40,6 @@ public interface BookingRepository {
     List<BookingDto> getWaitingBookingsByUserId(long userId);
 
     List<BookingDto> getRejectedBookingsByUserId(long userId);
+
+    Optional<BookingDto> getLastBookingByItemId(long itemId);
 }

@@ -1,10 +1,7 @@
 package ru.practicum.shareit.user.mapper;
 
-import ru.practicum.shareit.item.mapper.ItemMapper;
 import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.model.User;
-
-import java.util.stream.Collectors;
 
 public class UserMapper {
 
@@ -16,8 +13,6 @@ public class UserMapper {
             user.setName(userDto.getName());
         if (userDto.getEmail() != null)
             user.setEmail(userDto.getEmail());
-        if (userDto.getItems() != null)
-            user.setItems(userDto.getItems().stream().map(ItemMapper::toItem).collect(Collectors.toList()));
         return user;
     }
 
@@ -29,8 +24,6 @@ public class UserMapper {
             userDto.setName(user.getName());
         if (user.getEmail() != null)
             userDto.setEmail(user.getEmail());
-        if (user.getItems() != null)
-            userDto.setItems(user.getItems().stream().map(ItemMapper::toItemDto).collect(Collectors.toList()));
         return userDto;
     }
 }

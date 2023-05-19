@@ -5,24 +5,19 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.request.model.ItemRequest;
-import ru.practicum.shareit.user.model.AdvanceInfo;
 import ru.practicum.shareit.user.model.User;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import java.util.List;
 
-/**
- * TODO Sprint add-controllers.
- */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class Item {
-
+public class ItemResponse {
     Long id;
 
     @NotNull(groups = BasicInfo.class)
@@ -36,9 +31,12 @@ public class Item {
     @NotNull(groups = BasicInfo.class)
     Boolean available;
 
-    User owner;
+    // todo refactor this fields
+    Booking lastBooking;
 
-    ItemRequest request;
+    Booking nextBooking;
 
     List<Comment> comments;
+
+    ItemRequest request;
 }

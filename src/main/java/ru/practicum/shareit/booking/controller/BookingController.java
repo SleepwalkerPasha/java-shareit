@@ -1,6 +1,7 @@
 package ru.practicum.shareit.booking.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -11,9 +12,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ru.practicum.shareit.booking.model.Booking;
+import ru.practicum.shareit.booking.model.BookingRequest;
 import ru.practicum.shareit.booking.model.BookingState;
 import ru.practicum.shareit.booking.service.BookingService;
+import ru.practicum.shareit.exception.NotValidBookingRequestException;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -24,7 +28,8 @@ public class BookingController {
     private final BookingService bookingService;
 
     @PostMapping
-    public Booking addBooking(@RequestHeader(name = "X-Sharer-User-Id") long userId, @RequestBody Booking booking) {
+    public Booking addBooking(@RequestHeader(name = "X-Sharer-User-Id") long userId, @RequestBody @Validated BookingRequest booking) {
+        validateBookingRequest(booking);
         return bookingService.addBooking(userId, booking);
     }
 
@@ -50,5 +55,14 @@ public class BookingController {
     public List<Booking> getAllBookingsOfUser(@RequestHeader(name = "X-Sharer-User-Id") long userId,
                                               @RequestParam(name = "state", required = false) BookingState state) {
         return bookingService.getBookingsByOwnerId(userId, state);
+    }
+
+    private void validateBookingRequest(BookingRequest bookingRequest) {
+        if (bookingRequest.getEnd().isBefore(bookingRequest.getStart()))
+            throw new NotValidBookingRequestException("конец раньше старта бронирования");
+        else if (bookingRequest.getStart().equals(bookingRequest.getEnd()))
+            throw new NotValidBookingRequestException("конец равен старта бронирования");
+        else if (bookingRequest.getStart().isBefore(LocalDateTime.now()))
+            throw new NotValidBookingRequestException("старт бронирования в прошлом");
     }
 }

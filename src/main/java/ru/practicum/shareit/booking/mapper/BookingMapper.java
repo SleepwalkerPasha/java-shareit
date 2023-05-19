@@ -12,7 +12,7 @@ public class BookingMapper {
     public static Booking toBooking(BookingDto bookingDto) {
         Booking booking = new Booking();
         if (bookingDto.getId() != null)
-            booking.setId(booking.getId());
+            booking.setId(bookingDto.getId());
         if (bookingDto.getStatus() != null)
             booking.setStatus(bookingDto.getStatus());
         if (bookingDto.getBooker() != null)

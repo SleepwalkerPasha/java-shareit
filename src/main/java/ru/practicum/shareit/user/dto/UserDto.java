@@ -28,6 +28,7 @@ public class UserDto {
     @Column(name = "user_name")
     String name;
 
+    @Column(name = "email", unique = true)
     String email;
 
 }

@@ -8,8 +8,8 @@ import java.util.List;
 
 public interface JpaItemRepository extends JpaRepository<ItemDto, Long> {
 
-    @Query("select i from ItemDto i where lower(i.name) like lower(concat('%', ?1,'%')) " +
-            "or lower(i.description) like lower(concat('%', ?1,'%'))")
+    @Query("select i from ItemDto i where (lower(i.name) like lower(concat('%', ?1,'%')) " +
+            "or lower(i.description) like lower(concat('%', ?1,'%'))) and i.available = true")
     List<ItemDto> findAllItemsBySubstring(String substr);
 
     @Query("select i from ItemDto i " +
