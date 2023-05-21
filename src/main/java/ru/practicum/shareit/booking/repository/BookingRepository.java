@@ -42,4 +42,5 @@ public interface BookingRepository {
     List<BookingDto> getRejectedBookingsByUserId(long userId);
 
     Optional<BookingDto> getLastBookingByItemId(long itemId);
+
 }

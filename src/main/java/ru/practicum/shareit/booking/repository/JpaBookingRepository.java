@@ -9,6 +9,7 @@ import java.util.Optional;
 
 public interface JpaBookingRepository extends JpaRepository<BookingDto, Long> {
 
+
     @Query("select b from BookingDto b " +
             "where b.booker.id = ?1 and b.id = ?2")
     Optional<BookingDto> findBookingDtoByBookerId(long userId, long bookingId);
@@ -21,73 +22,73 @@ public interface JpaBookingRepository extends JpaRepository<BookingDto, Long> {
     // past
     @Query("select b from BookingDto b " +
             "where b.booker.id = ?1 and b.end_date <= now() " +
-            "order by b.start_date")
+            "order by b.id desc")
     List<BookingDto> findAllPastBookings(long bookerId);
 
     // current
     @Query("select b from BookingDto b " +
             "where b.booker.id = ?1 and now() between b.start_date and b.end_date " +
-            "order by b.start_date")
+            "order by b.id desc")
     List<BookingDto> findAllCurrentBookings(long bookerId);
 
     // all
     @Query("select b from BookingDto b " +
             "where b.booker.id = ?1" +
-            " order by b.start_date")
+            " order by b.id desc")
     List<BookingDto> findAllByBookerId(long bookerId);
 
     // future
     @Query("select b from BookingDto b " +
-            "where b.booker.id = ?1 and b.start_date >= now()" +
-            "order by b.start_date")
+            "where b.booker.id = ?1 and b.start_date > now() and b.end_date > now() " +
+            "order by b.id desc")
     List<BookingDto> findAllFutureBookings(long bookerId);
 
     // waiting
     @Query("select b from BookingDto b " +
             "where b.booker.id = ?1 and b.status = 'WAITING' " +
-            "order by b.start_date")
+            "order by b.id desc")
     List<BookingDto> findAllWaitingBookings(long bookerId);
 
     // rejected
     @Query("select b from BookingDto b " +
             "where b.booker.id = ?1 and b.status = 'REJECTED' " +
-            "order by b.start_date")
+            "order by b.id desc")
     List<BookingDto> findAllRejectedBookings(long bookerId);
 
 
     @Query("select b from BookingDto b " +
             "where b.item.owner.id = ?1 and b.end_date <= now() " +
-            "order by b.start_date")
+            "order by b.id desc")
     List<BookingDto> findAllPastOwnerBookings(long ownerId);
 
     // current
     @Query("select b from BookingDto b " +
             "where b.item.owner.id = ?1 and now() between b.start_date and b.end_date " +
-            "order by b.start_date")
+            "order by b.id desc")
     List<BookingDto> findAllCurrentOwnerBookings(long ownerId);
 
     // all
     @Query("select b from BookingDto b " +
             "where b.item.owner.id = ?1" +
-            " order by b.start_date")
+            " order by b.id desc")
     List<BookingDto> findAllByOwnerId(long ownerId);
 
     // future
     @Query("select b from BookingDto b " +
             "where b.item.owner.id = ?1 and b.start_date >= now()" +
-            "order by b.start_date")
+            "order by b.id desc")
     List<BookingDto> findAllFutureOwnerBookings(long ownerId);
 
     // waiting
     @Query("select b from BookingDto b " +
             "where b.item.owner.id = ?1 and b.status = 'WAITING' " +
-            "order by b.start_date")
+            "order by b.id desc")
     List<BookingDto> findAllWaitingOwnerBookings(long ownerId);
 
     // rejected
     @Query("select b from BookingDto b " +
             "where b.item.owner.id = ?1 and b.status = 'REJECTED' " +
-            "order by b.start_date")
+            "order by b.id desc")
     List<BookingDto> findAllRejectedOwnerBookings(long ownerId);
 
     @Query("select b from BookingDto b " +
@@ -97,6 +98,7 @@ public interface JpaBookingRepository extends JpaRepository<BookingDto, Long> {
 
     @Query("select b from BookingDto b " +
             "where b.item.id = ?1 " +
-            "order by b.end_date desc")
+            "order by b.id desc ")
     Optional<BookingDto> findLastBooking(long itemId);
+
 }

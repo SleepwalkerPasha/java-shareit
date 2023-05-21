@@ -104,5 +104,4 @@ public class BookingRepositoryImpl implements BookingRepository {
         return jpaBookingRepository.findLastBooking(itemId);
     }
 
-
 }

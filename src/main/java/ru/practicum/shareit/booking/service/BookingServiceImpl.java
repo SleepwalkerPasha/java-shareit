@@ -2,7 +2,6 @@ package ru.practicum.shareit.booking.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.mapper.BookingMapper;
@@ -14,6 +13,7 @@ import ru.practicum.shareit.booking.repository.BookingRepository;
 import ru.practicum.shareit.exception.BookingStatusAlreadyApprovedException;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.exception.UnavailableItemException;
+import ru.practicum.shareit.exception.UnsupportedStatusException;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.mapper.ItemMapper;
 import ru.practicum.shareit.item.repository.ItemRepository;
@@ -37,13 +37,16 @@ public class BookingServiceImpl implements BookingService {
     private final ItemRepository itemRepository;
 
     @Override
-    @Transactional(isolation = Isolation.REPEATABLE_READ)
     public Booking addBooking(long userId, BookingRequest bookingRequest) {
         Long itemId = bookingRequest.getItemId();
         Optional<ItemDto> item = itemRepository.getItem(itemId);
-        if (item.isEmpty())
+        if (item.isEmpty()) {
             throw new NotFoundException("такого предмета нет");
+        }
         ItemDto itemDto = item.get();
+        if (itemDto.getOwner().getId().equals(userId)) {
+            throw new NotFoundException("владелец бронирует свою вещь");
+        }
         Optional<BookingDto> lastBooking = bookingRepository.getLastBookingByItemId(itemId);
         if (!itemDto.getAvailable()) {
             if (lastBooking.isPresent()) {
@@ -62,13 +65,10 @@ public class BookingServiceImpl implements BookingService {
         booking.setBooker(UserMapper.toUser(checkForUser(userId)));
         booking.setStart(bookingRequest.getStart());
         booking.setEnd(bookingRequest.getEnd());
-//        itemDto.setAvailable(false);
-        itemRepository.updateItem(itemDto);
         return BookingMapper.toBooking(bookingRepository.addBooking(userId, BookingMapper.toBookingDto(booking)));
     }
 
     @Override
-    @Transactional(isolation = Isolation.REPEATABLE_READ)
     public Booking approveBooking(long ownerId, long bookingId, boolean approved) {
         BookingDto bookingDto = checkForOwner(ownerId, bookingId);
         if (bookingDto.getStatus().equals(BookingStatus.APPROVED) || bookingDto.getStatus().equals(BookingStatus.REJECTED))
@@ -94,8 +94,10 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Booking> getBookingsByUserId(long userId, BookingState state) {
         List<BookingDto> returnedList;
+        checkForUser(userId);
         switch (state) {
             case PAST:
                 returnedList = bookingRepository.getPastBookingsByUserId(userId);
@@ -112,20 +114,22 @@ public class BookingServiceImpl implements BookingService {
             case REJECTED:
                 returnedList = bookingRepository.getRejectedBookingsByUserId(userId);
                 break;
-            default:
+            case ALL:
                 returnedList = bookingRepository.getAllBookingsByUserId(userId);
                 break;
+            default:
+                throw new UnsupportedStatusException("Unknown state: UNSUPPORTED_STATUS");
         }
-        if (returnedList == null)
-            throw new IllegalArgumentException("нет такого параметра BookingState");
         return returnedList.stream()
                 .map(BookingMapper::toBooking)
                 .collect(Collectors.toList());
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Booking> getBookingsByOwnerId(long ownerId, BookingState state) {
         List<BookingDto> returnedList;
+        checkForUser(ownerId);
         switch (state) {
             case PAST:
                 returnedList = bookingRepository.getPastBookingsByOwnerId(ownerId);
@@ -142,12 +146,12 @@ public class BookingServiceImpl implements BookingService {
             case REJECTED:
                 returnedList = bookingRepository.getRejectedBookingsByOwnerId(ownerId);
                 break;
-            default:
+            case ALL:
                 returnedList = bookingRepository.getAllBookingsByOwnerId(ownerId);
                 break;
+            default:
+                throw new UnsupportedStatusException("Unknown state: UNSUPPORTED_STATUS");
         }
-        if (returnedList == null)
-            throw new IllegalArgumentException("нет такого параметра BookingState");
         return returnedList.stream()
                 .map(BookingMapper::toBooking)
                 .collect(Collectors.toList());
