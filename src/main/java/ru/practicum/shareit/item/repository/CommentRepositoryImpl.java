@@ -2,11 +2,10 @@ package ru.practicum.shareit.item.repository;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
-import ru.practicum.shareit.item.mapper.CommentMapper;
-import ru.practicum.shareit.item.model.Comment;
+import ru.practicum.shareit.item.dto.CommentDto;
+import ru.practicum.shareit.user.repository.JpaUserRepository;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Repository
 @RequiredArgsConstructor
@@ -14,22 +13,15 @@ public class CommentRepositoryImpl implements CommentRepository {
 
     private final JpaCommentRepository commentRepository;
 
+    private final JpaUserRepository userRepository;
+
     @Override
-    public Comment addComment(Comment comment) {
-        return CommentMapper.toComment(commentRepository.save(CommentMapper.toCommentDto(comment)));
+    public CommentDto addComment(CommentDto comment) {
+        return commentRepository.save(comment);
     }
 
     @Override
-    public List<Comment> getCommentByAuthorId(long authorId) {
-        return commentRepository.findAllByAuthorDto_Id(authorId).stream()
-                .map(CommentMapper::toComment)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<Comment> getCommentByItemId(long itemId) {
-        return commentRepository.findAllByItemDto_Id(itemId).stream()
-                .map(CommentMapper::toComment)
-                .collect(Collectors.toList());
+    public List<CommentDto> getCommentByItemId(long itemId) {
+        return commentRepository.findAllByItemDto_Id(itemId);
     }
 }

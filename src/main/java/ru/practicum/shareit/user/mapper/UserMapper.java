@@ -7,23 +7,29 @@ public class UserMapper {
 
     public static User toUser(UserDto userDto) {
         User user = new User();
-        if (userDto.getId() != null)
+        if (userDto.getId() != null) {
             user.setId(userDto.getId());
-        if (userDto.getName() != null)
+        }
+        if (userDto.getName() != null) {
             user.setName(userDto.getName());
-        if (userDto.getEmail() != null)
+        }
+        if (userDto.getEmail() != null) {
             user.setEmail(userDto.getEmail());
+        }
         return user;
     }
 
     public static UserDto toUserDto(User user) {
         UserDto userDto = new UserDto();
-        if (user.getId() != null)
+        if (user.getId() != null) {
             userDto.setId(user.getId());
-        if (user.getName() != null)
+        }
+        if (user.getName() != null) {
             userDto.setName(user.getName());
-        if (user.getEmail() != null)
+        }
+        if (user.getEmail() != null) {
             userDto.setEmail(user.getEmail());
+        }
         return userDto;
     }
 }

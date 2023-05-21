@@ -8,6 +8,7 @@ import lombok.experimental.FieldDefaults;
 import ru.practicum.shareit.user.dto.UserDto;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -34,7 +35,7 @@ public class ItemRequestDto {
     String description;
 
     @JoinColumn(name = "requestor_id")
-    @ManyToOne
+    @ManyToOne(targetEntity = UserDto.class, fetch = FetchType.LAZY)
     UserDto requestor;
 
     Timestamp created;

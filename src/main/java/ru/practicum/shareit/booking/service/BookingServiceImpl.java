@@ -21,7 +21,6 @@ import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.mapper.UserMapper;
 import ru.practicum.shareit.user.repository.UserRepository;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -47,17 +46,8 @@ public class BookingServiceImpl implements BookingService {
         if (itemDto.getOwner().getId().equals(userId)) {
             throw new NotFoundException("владелец бронирует свою вещь");
         }
-        Optional<BookingDto> lastBooking = bookingRepository.getLastBookingByItemId(itemId);
         if (!itemDto.getAvailable()) {
-            if (lastBooking.isPresent()) {
-                if (BookingMapper.toBooking(lastBooking.get()).getEnd().isBefore(LocalDateTime.now())) {
-                    itemDto.setAvailable(true);
-                } else {
-                    throw new UnavailableItemException("предмет не доступен для бронирования");
-                }
-            } else {
-                throw new UnavailableItemException("предмет не доступен для бронирования");
-            }
+            throw new UnavailableItemException("предмет не доступен для бронирования");
         }
         Booking booking = new Booking();
         booking.setItem(ItemMapper.toItem(itemDto));

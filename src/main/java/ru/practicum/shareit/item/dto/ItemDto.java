@@ -10,6 +10,7 @@ import ru.practicum.shareit.user.dto.UserDto;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -17,9 +18,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-/**
- * TODO Sprint add-controllers.
- */
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @AllArgsConstructor
@@ -41,11 +39,11 @@ public class ItemDto {
     Boolean available;
 
     @JoinColumn(name = "owner_id")
-    @ManyToOne(targetEntity = UserDto.class)
+    @ManyToOne(targetEntity = UserDto.class, fetch = FetchType.LAZY)
     UserDto owner;
 
     @JoinColumn(name = "request_id")
-    @ManyToOne(targetEntity = ItemRequestDto.class)
+    @ManyToOne(targetEntity = ItemRequestDto.class, fetch = FetchType.LAZY)
     ItemRequestDto itemRequest;
-    
+
 }

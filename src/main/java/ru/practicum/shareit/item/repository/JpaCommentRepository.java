@@ -9,5 +9,4 @@ public interface JpaCommentRepository extends JpaRepository<CommentDto, Long> {
 
     List<CommentDto> findAllByItemDto_Id(long itemId);
 
-    List<CommentDto> findAllByAuthorDto_Id(long userId);
 }

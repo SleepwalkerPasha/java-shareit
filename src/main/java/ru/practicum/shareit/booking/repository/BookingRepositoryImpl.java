@@ -29,8 +29,8 @@ public class BookingRepositoryImpl implements BookingRepository {
     }
 
     @Override
-    public Optional<BookingDto> getBookingByItemIdAndUserId(long userId, long itemId) {
-        return jpaBookingRepository.findBookingByUserIdAndItemId(userId, itemId);
+    public List<BookingDto> getBookingsByItemIdAndUserId(long itemId, long userId) {
+        return jpaBookingRepository.findBookingDtoByItemIdAndBookerId(itemId, userId);
     }
 
     @Override
@@ -100,8 +100,7 @@ public class BookingRepositoryImpl implements BookingRepository {
     }
 
     @Override
-    public Optional<BookingDto> getLastBookingByItemId(long itemId) {
-        return jpaBookingRepository.findLastBooking(itemId);
+    public List<BookingDto> getBookingsByItemId(long itemId) {
+        return jpaBookingRepository.findBookingByItemId(itemId);
     }
-
 }

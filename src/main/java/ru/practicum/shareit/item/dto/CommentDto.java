@@ -9,6 +9,7 @@ import ru.practicum.shareit.user.dto.UserDto;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -33,7 +34,7 @@ public class CommentDto {
     String text;
 
     @JoinColumn(name = "item_id")
-    @ManyToOne(targetEntity = ItemDto.class)
+    @ManyToOne(targetEntity = ItemDto.class, fetch = FetchType.LAZY)
     ItemDto itemDto;
 
     @JoinColumn(name = "author_id")

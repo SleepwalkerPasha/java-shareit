@@ -11,35 +11,47 @@ public class BookingMapper {
 
     public static Booking toBooking(BookingDto bookingDto) {
         Booking booking = new Booking();
-        if (bookingDto.getId() != null)
+        if (bookingDto.getId() != null) {
             booking.setId(bookingDto.getId());
-        if (bookingDto.getStatus() != null)
+        }
+        if (bookingDto.getStatus() != null) {
             booking.setStatus(bookingDto.getStatus());
-        if (bookingDto.getBooker() != null)
+        }
+        if (bookingDto.getBooker() != null) {
             booking.setBooker(UserMapper.toUser(bookingDto.getBooker()));
-        if (bookingDto.getStart_date() != null)
+        }
+        if (bookingDto.getStart_date() != null) {
             booking.setStart(bookingDto.getStart_date().toLocalDateTime());
-        if (bookingDto.getEnd_date() != null)
+        }
+        if (bookingDto.getEnd_date() != null) {
             booking.setEnd(bookingDto.getEnd_date().toLocalDateTime());
-        if (bookingDto.getItem() != null)
+        }
+        if (bookingDto.getItem() != null) {
             booking.setItem(ItemMapper.toItem(bookingDto.getItem()));
+        }
         return booking;
     }
 
     public static BookingDto toBookingDto(Booking booking) {
         BookingDto bookingDto = new BookingDto();
-        if (booking.getId() != null)
+        if (booking.getId() != null) {
             bookingDto.setId(booking.getId());
-        if (booking.getStatus() != null)
+        }
+        if (booking.getStatus() != null) {
             bookingDto.setStatus(booking.getStatus());
-        if (booking.getBooker() != null)
+        }
+        if (booking.getBooker() != null) {
             bookingDto.setBooker(UserMapper.toUserDto(booking.getBooker()));
-        if (booking.getStart() != null)
+        }
+        if (booking.getStart() != null) {
             bookingDto.setStart_date(Timestamp.valueOf(booking.getStart()));
-        if (booking.getEnd() != null)
+        }
+        if (booking.getEnd() != null) {
             bookingDto.setEnd_date(Timestamp.valueOf(booking.getEnd()));
-        if (booking.getItem() != null)
+        }
+        if (booking.getItem() != null) {
             bookingDto.setItem(ItemMapper.toItemDto(booking.getItem()));
+        }
         return bookingDto;
     }
 }

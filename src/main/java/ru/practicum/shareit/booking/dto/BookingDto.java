@@ -25,17 +25,17 @@ public class BookingDto {
     Long id;
 
     @Column(name = "start_date")
-    Timestamp start_date;
+    Timestamp startDate;
 
     @Column(name = "end_date")
-    Timestamp end_date;
+    Timestamp endDate;
 
     @JoinColumn(name = "item_id")
-    @ManyToOne(targetEntity = ItemDto.class)
+    @ManyToOne(targetEntity = ItemDto.class, fetch = FetchType.LAZY)
     ItemDto item;
 
     @JoinColumn(name = "booker_id")
-    @ManyToOne(targetEntity = UserDto.class)
+    @ManyToOne(targetEntity = UserDto.class, fetch = FetchType.LAZY)
     UserDto booker;
 
     @Enumerated(value = EnumType.STRING)

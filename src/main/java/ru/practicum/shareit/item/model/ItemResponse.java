@@ -5,9 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import ru.practicum.shareit.booking.model.Booking;
-import ru.practicum.shareit.request.model.ItemRequest;
-import ru.practicum.shareit.user.model.User;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -31,12 +28,9 @@ public class ItemResponse {
     @NotNull(groups = BasicInfo.class)
     Boolean available;
 
-    // todo refactor this fields
-    Booking lastBooking;
+    BookingInfo lastBooking;
 
-    Booking nextBooking;
+    BookingInfo nextBooking;
 
     List<Comment> comments;
-
-    ItemRequest request;
 }

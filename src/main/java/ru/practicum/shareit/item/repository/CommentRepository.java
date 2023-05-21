@@ -1,14 +1,12 @@
 package ru.practicum.shareit.item.repository;
 
-import ru.practicum.shareit.item.model.Comment;
+import ru.practicum.shareit.item.dto.CommentDto;
 
 import java.util.List;
 
 public interface CommentRepository {
 
-    Comment addComment(Comment comment);
+    CommentDto addComment(CommentDto comment);
 
-    List<Comment> getCommentByAuthorId(long authorId);
-
-    List<Comment> getCommentByItemId(long itemId);
+    List<CommentDto> getCommentByItemId(long itemId);
 }
