@@ -20,11 +20,11 @@ public class BookingMapper {
         if (bookingDto.getBooker() != null) {
             booking.setBooker(UserMapper.toUser(bookingDto.getBooker()));
         }
-        if (bookingDto.getStart_date() != null) {
-            booking.setStart(bookingDto.getStart_date().toLocalDateTime());
+        if (bookingDto.getStartDate() != null) {
+            booking.setStart(bookingDto.getStartDate().toLocalDateTime());
         }
-        if (bookingDto.getEnd_date() != null) {
-            booking.setEnd(bookingDto.getEnd_date().toLocalDateTime());
+        if (bookingDto.getEndDate() != null) {
+            booking.setEnd(bookingDto.getEndDate().toLocalDateTime());
         }
         if (bookingDto.getItem() != null) {
             booking.setItem(ItemMapper.toItem(bookingDto.getItem()));
@@ -44,10 +44,10 @@ public class BookingMapper {
             bookingDto.setBooker(UserMapper.toUserDto(booking.getBooker()));
         }
         if (booking.getStart() != null) {
-            bookingDto.setStart_date(Timestamp.valueOf(booking.getStart()));
+            bookingDto.setStartDate(Timestamp.valueOf(booking.getStart()));
         }
         if (booking.getEnd() != null) {
-            bookingDto.setEnd_date(Timestamp.valueOf(booking.getEnd()));
+            bookingDto.setEndDate(Timestamp.valueOf(booking.getEnd()));
         }
         if (booking.getItem() != null) {
             bookingDto.setItem(ItemMapper.toItemDto(booking.getItem()));

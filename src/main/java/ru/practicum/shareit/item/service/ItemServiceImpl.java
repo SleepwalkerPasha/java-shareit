@@ -118,12 +118,12 @@ public class ItemServiceImpl implements ItemService {
 
         Optional<BookingDto> nextBooking = bookings
                 .stream()
-                .filter(x -> x.getStart_date().after(Timestamp.valueOf(LocalDateTime.now())) && x.getStatus().equals(BookingStatus.APPROVED))
+                .filter(x -> x.getStartDate().after(Timestamp.valueOf(LocalDateTime.now())) && x.getStatus().equals(BookingStatus.APPROVED))
                 .findFirst();
         Collections.reverse(bookings);
         Optional<BookingDto> lastBooking = bookings
                 .stream()
-                .filter(x -> x.getStart_date().before(Timestamp.valueOf(LocalDateTime.now())) && x.getStatus().equals(BookingStatus.APPROVED))
+                .filter(x -> x.getStartDate().before(Timestamp.valueOf(LocalDateTime.now())) && x.getStatus().equals(BookingStatus.APPROVED))
                 .findFirst();
         nextBooking.ifPresent(bookingDto -> itemResponse.setNextBooking(new BookingInfo(bookingDto.getId(), bookingDto.getBooker().getId())));
         lastBooking.ifPresent(bookingDto -> itemResponse.setLastBooking(new BookingInfo(bookingDto.getId(), bookingDto.getBooker().getId())));
@@ -150,7 +150,7 @@ public class ItemServiceImpl implements ItemService {
         if (bookings.isEmpty()) {
             throw new UnavailableItemException("данный пользователь не брал эту вещь в аренду");
         }
-        if (bookings.size() == 1 && bookings.get(0).getEnd_date().after(Timestamp.valueOf(LocalDateTime.now()))) {
+        if (bookings.size() == 1 && bookings.get(0).getEndDate().after(Timestamp.valueOf(LocalDateTime.now()))) {
             throw new UnsupportedStatusException("бронирование еще не началось");
         }
         comment.setAuthorName(userDto.getName());

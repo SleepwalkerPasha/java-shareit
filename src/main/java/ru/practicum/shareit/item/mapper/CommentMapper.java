@@ -11,7 +11,6 @@ public class CommentMapper {
         Comment comment = new Comment();
         if (commentDto.getId() != null) {
             comment.setId(commentDto.getId());
-            ;
         }
         if (commentDto.getItemDto() != null) {
             comment.setItem(ItemMapper.toItem(commentDto.getItemDto()));
