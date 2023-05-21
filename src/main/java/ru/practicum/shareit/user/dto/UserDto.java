@@ -25,7 +25,7 @@ public class UserDto {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
-    @Column(name = "user_name")
+    @Column(name = "name")
     String name;
 
     @Column(name = "email", unique = true)

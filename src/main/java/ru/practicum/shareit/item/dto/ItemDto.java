@@ -30,7 +30,7 @@ public class ItemDto {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
-    @Column(name = "item_name")
+    @Column(name = "name")
     String name;
 
     String description;
