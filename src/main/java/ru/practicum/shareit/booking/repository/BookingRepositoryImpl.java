@@ -100,7 +100,12 @@ public class BookingRepositoryImpl implements BookingRepository {
     }
 
     @Override
-    public List<BookingDto> getBookingsByItemId(long itemId) {
-        return jpaBookingRepository.findBookingByItemId(itemId);
+    public List<BookingDto> getApprovedBookingsByItemId(long itemId) {
+        return jpaBookingRepository.findApprovedBookingByItemId(itemId);
+    }
+
+    @Override
+    public List<BookingDto> getApprovedBookingsInItems(List<Long> itemIds) {
+        return jpaBookingRepository.findApprovedBookingInItemIds(itemIds);
     }
 }

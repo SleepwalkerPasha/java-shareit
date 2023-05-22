@@ -8,5 +8,7 @@ public interface CommentRepository {
 
     CommentDto addComment(CommentDto comment);
 
-    List<CommentDto> getCommentByItemId(long itemId);
+    List<CommentDto> getCommentsByItemId(long itemId);
+
+    List<CommentDto> getCommentsInItemIds(List<Long> itemIds);
 }

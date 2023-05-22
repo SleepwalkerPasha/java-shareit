@@ -15,11 +15,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
-/**
- * TODO Sprint add-item-requests.
- */
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @AllArgsConstructor
@@ -38,5 +35,5 @@ public class ItemRequestDto {
     @ManyToOne(targetEntity = UserDto.class, fetch = FetchType.LAZY)
     UserDto requestor;
 
-    Timestamp created;
+    LocalDateTime created;
 }

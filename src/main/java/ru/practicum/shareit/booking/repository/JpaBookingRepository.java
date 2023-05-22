@@ -97,8 +97,12 @@ public interface JpaBookingRepository extends JpaRepository<BookingDto, Long> {
 
 
     @Query("select b from BookingDto b " +
-            "where b.item.id = ?1 " +
-            "order by b.endDate")
-    List<BookingDto> findBookingByItemId(long itemId);
+            "where b.item.id = ?1 and b.status = 'APPROVED'" +
+            " order by b.endDate")
+    List<BookingDto> findApprovedBookingByItemId(long itemId);
 
+    @Query("select b from BookingDto b " +
+            "where b.item.id in ?1 and b.status = 'APPROVED' " +
+            "order by b.endDate")
+    List<BookingDto> findApprovedBookingInItemIds(List<Long> itemIds);
 }

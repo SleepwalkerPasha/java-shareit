@@ -5,8 +5,6 @@ import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.item.mapper.ItemMapper;
 import ru.practicum.shareit.user.mapper.UserMapper;
 
-import java.sql.Timestamp;
-
 public class BookingMapper {
 
     public static Booking toBooking(BookingDto bookingDto) {
@@ -21,10 +19,10 @@ public class BookingMapper {
             booking.setBooker(UserMapper.toUser(bookingDto.getBooker()));
         }
         if (bookingDto.getStartDate() != null) {
-            booking.setStart(bookingDto.getStartDate().toLocalDateTime());
+            booking.setStart(bookingDto.getStartDate());
         }
         if (bookingDto.getEndDate() != null) {
-            booking.setEnd(bookingDto.getEndDate().toLocalDateTime());
+            booking.setEnd(bookingDto.getEndDate());
         }
         if (bookingDto.getItem() != null) {
             booking.setItem(ItemMapper.toItem(bookingDto.getItem()));
@@ -44,10 +42,10 @@ public class BookingMapper {
             bookingDto.setBooker(UserMapper.toUserDto(booking.getBooker()));
         }
         if (booking.getStart() != null) {
-            bookingDto.setStartDate(Timestamp.valueOf(booking.getStart()));
+            bookingDto.setStartDate(booking.getStart());
         }
         if (booking.getEnd() != null) {
-            bookingDto.setEndDate(Timestamp.valueOf(booking.getEnd()));
+            bookingDto.setEndDate(booking.getEnd());
         }
         if (booking.getItem() != null) {
             bookingDto.setItem(ItemMapper.toItemDto(booking.getItem()));

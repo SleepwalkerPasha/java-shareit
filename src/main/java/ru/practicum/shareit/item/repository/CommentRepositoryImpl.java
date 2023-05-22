@@ -18,7 +18,13 @@ public class CommentRepositoryImpl implements CommentRepository {
     }
 
     @Override
-    public List<CommentDto> getCommentByItemId(long itemId) {
+    public List<CommentDto> getCommentsByItemId(long itemId) {
         return commentRepository.findAllByItemDto_Id(itemId);
     }
+
+    @Override
+    public List<CommentDto> getCommentsInItemIds(List<Long> itemIds) {
+        return commentRepository.findAllInItemIds(itemIds);
+    }
+
 }

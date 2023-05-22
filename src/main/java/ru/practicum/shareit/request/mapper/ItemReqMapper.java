@@ -4,8 +4,6 @@ import ru.practicum.shareit.request.dto.ItemRequestDto;
 import ru.practicum.shareit.request.model.ItemRequest;
 import ru.practicum.shareit.user.mapper.UserMapper;
 
-import java.sql.Timestamp;
-
 public class ItemReqMapper {
 
     public static ItemRequest toItemRequest(ItemRequestDto itemRequestDto) {
@@ -15,7 +13,7 @@ public class ItemReqMapper {
         if (itemRequestDto.getDescription() != null)
             itemRequest.setDescription(itemRequestDto.getDescription());
         if (itemRequestDto.getCreated() != null)
-            itemRequest.setCreated(itemRequestDto.getCreated().toLocalDateTime());
+            itemRequest.setCreated(itemRequestDto.getCreated());
         if (itemRequestDto.getRequestor() != null)
             itemRequest.setRequestor(UserMapper.toUser(itemRequestDto.getRequestor()));
         return itemRequest;
@@ -28,7 +26,7 @@ public class ItemReqMapper {
         if (itemRequest.getDescription() != null)
             itemRequestDto.setDescription(itemRequest.getDescription());
         if (itemRequest.getCreated() != null)
-            itemRequestDto.setCreated(Timestamp.valueOf(itemRequest.getCreated()));
+            itemRequestDto.setCreated(itemRequest.getCreated());
         if (itemRequest.getRequestor() != null)
             itemRequestDto.setRequestor(UserMapper.toUserDto(itemRequest.getRequestor()));
         return itemRequestDto;

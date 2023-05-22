@@ -3,8 +3,6 @@ package ru.practicum.shareit.item.mapper;
 import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.item.model.Comment;
 
-import java.sql.Timestamp;
-
 public class CommentMapper {
 
     public static Comment toComment(CommentDto commentDto) {
@@ -22,7 +20,7 @@ public class CommentMapper {
             comment.setText(commentDto.getText());
         }
         if (commentDto.getCreated() != null) {
-            comment.setCreated(commentDto.getCreated().toLocalDateTime());
+            comment.setCreated(commentDto.getCreated());
         }
         return comment;
     }
@@ -39,7 +37,7 @@ public class CommentMapper {
             commentDto.setText(comment.getText());
         }
         if (comment.getCreated() != null) {
-            commentDto.setCreated(Timestamp.valueOf(comment.getCreated()));
+            commentDto.setCreated(comment.getCreated());
         }
         return commentDto;
     }

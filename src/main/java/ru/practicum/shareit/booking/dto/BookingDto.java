@@ -10,7 +10,7 @@ import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.user.dto.UserDto;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
@@ -25,10 +25,10 @@ public class BookingDto {
     Long id;
 
     @Column(name = "start_date")
-    Timestamp startDate;
+    LocalDateTime startDate;
 
     @Column(name = "end_date")
-    Timestamp endDate;
+    LocalDateTime endDate;
 
     @JoinColumn(name = "item_id")
     @ManyToOne(targetEntity = ItemDto.class, fetch = FetchType.LAZY)

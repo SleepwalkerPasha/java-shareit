@@ -41,6 +41,7 @@ public interface BookingRepository {
 
     List<BookingDto> getRejectedBookingsByUserId(long userId);
 
-    List<BookingDto> getBookingsByItemId(long itemId);
+    List<BookingDto> getApprovedBookingsByItemId(long itemId);
 
+    List<BookingDto> getApprovedBookingsInItems(List<Long> itemIds);
 }

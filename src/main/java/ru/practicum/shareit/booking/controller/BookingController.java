@@ -65,7 +65,7 @@ public class BookingController {
         if (bookingRequest.getEnd().isBefore(bookingRequest.getStart()))
             throw new NotValidBookingRequestException("конец раньше старта бронирования");
         else if (bookingRequest.getStart().equals(bookingRequest.getEnd()))
-            throw new NotValidBookingRequestException("конец равен старта бронирования");
+            throw new NotValidBookingRequestException("конец равен началу бронирования");
         else if (bookingRequest.getStart().isBefore(LocalDateTime.now()))
             throw new NotValidBookingRequestException("старт бронирования в прошлом");
     }

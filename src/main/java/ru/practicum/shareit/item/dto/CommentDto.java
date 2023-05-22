@@ -16,7 +16,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
@@ -42,5 +42,5 @@ public class CommentDto {
     UserDto authorDto;
 
     @Column(name = "created")
-    Timestamp created;
+    LocalDateTime created;
 }
