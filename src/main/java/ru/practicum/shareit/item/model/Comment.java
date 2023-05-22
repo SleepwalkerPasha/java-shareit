@@ -1,25 +1,28 @@
-package ru.practicum.shareit.request.model;
+package ru.practicum.shareit.item.model;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import ru.practicum.shareit.user.model.User;
 
+import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 
 @Data
-@FieldDefaults(level = AccessLevel.PRIVATE)
 @AllArgsConstructor
 @NoArgsConstructor
-public class ItemRequest {
+@FieldDefaults(level = AccessLevel.PRIVATE)
+public class Comment {
 
     Long id;
 
-    String description;
+    @NotBlank
+    String text;
 
-    User requestor;
+    Item item;
+
+    String authorName;
 
     LocalDateTime created;
 }

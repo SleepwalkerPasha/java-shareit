@@ -3,26 +3,42 @@ package ru.practicum.shareit.booking.dto;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import ru.practicum.shareit.item.model.Item;
-import ru.practicum.shareit.user.model.User;
+import ru.practicum.shareit.booking.model.BookingStatus;
+import ru.practicum.shareit.item.dto.ItemDto;
+import ru.practicum.shareit.user.dto.UserDto;
 
-import java.sql.Timestamp;
+import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @AllArgsConstructor
+@NoArgsConstructor
+@Entity
+@Table(name = "bookings")
 public class BookingDto {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
-    Timestamp start;
+    @Column(name = "start_date")
+    LocalDateTime startDate;
 
-    Timestamp end;
+    @Column(name = "end_date")
+    LocalDateTime endDate;
 
-    Item item;
+    @JoinColumn(name = "item_id")
+    @ManyToOne(targetEntity = ItemDto.class, fetch = FetchType.LAZY)
+    ItemDto item;
 
-    User booker;
+    @JoinColumn(name = "booker_id")
+    @ManyToOne(targetEntity = UserDto.class, fetch = FetchType.LAZY)
+    UserDto booker;
 
-    String status;
+    @Enumerated(value = EnumType.STRING)
+    BookingStatus status;
 
 }
