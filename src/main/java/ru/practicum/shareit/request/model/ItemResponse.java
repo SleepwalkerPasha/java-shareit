@@ -7,22 +7,21 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import ru.practicum.shareit.user.model.User;
 
-import java.time.LocalDateTime;
-import java.util.List;
-
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @AllArgsConstructor
 @NoArgsConstructor
-public class ItemRequest {
+public class ItemResponse {
 
     Long id;
 
+    String name;
+
     String description;
 
-    User requestor;
+    Boolean available;
 
-    LocalDateTime created;
+    User owner;
 
-    List<ItemResponse> items;
+    ItemRequest request;
 }

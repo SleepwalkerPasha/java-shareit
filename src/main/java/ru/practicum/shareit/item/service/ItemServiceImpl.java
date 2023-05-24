@@ -16,7 +16,7 @@ import ru.practicum.shareit.item.mapper.ItemMapper;
 import ru.practicum.shareit.item.model.BookingInfo;
 import ru.practicum.shareit.item.model.Comment;
 import ru.practicum.shareit.item.model.Item;
-import ru.practicum.shareit.item.model.ItemResponse;
+import ru.practicum.shareit.item.model.ItemBookingInfo;
 import ru.practicum.shareit.item.repository.CommentRepository;
 import ru.practicum.shareit.item.repository.ItemRepository;
 import ru.practicum.shareit.user.dto.UserDto;
@@ -78,7 +78,7 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     @Transactional(readOnly = true)
-    public ItemResponse getItem(long itemId, long userId) {
+    public ItemBookingInfo getItem(long itemId, long userId) {
         Optional<ItemDto> itemDto = itemRepository.getItem(itemId);
         if (itemDto.isEmpty()) {
             throw new NotFoundException(String.format("итема с таким id = %d нет", itemId));
@@ -87,28 +87,28 @@ public class ItemServiceImpl implements ItemService {
                 .stream()
                 .map(CommentMapper::toComment)
                 .collect(Collectors.toList());
-        ItemResponse itemResponse = ItemMapper.toItemResponse(itemDto.get());
+        ItemBookingInfo itemBookingInfo = ItemMapper.toItemResponse(itemDto.get());
         if (itemDto.get().getOwner().getId().equals(userId)) {
-            List<BookingDto> bookings = bookingRepository.getApprovedBookingsByItemId(itemResponse.getId());
-            setBookingsForItemResponse(itemResponse, bookings);
+            List<BookingDto> bookings = bookingRepository.getApprovedBookingsByItemId(itemBookingInfo.getId());
+            setBookingsForItemResponse(itemBookingInfo, bookings);
         }
-        itemResponse.setComments(commentByItemId);
-        return itemResponse;
+        itemBookingInfo.setComments(commentByItemId);
+        return itemBookingInfo;
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<ItemResponse> getAllUserItems(long userId) {
+    public List<ItemBookingInfo> getAllUserItems(long userId) {
         checkForUser(userId);
         List<ItemDto> items = itemRepository.getUserItemsByUserId(userId);
-        List<ItemResponse> itemResponses = new ArrayList<>();
+        List<ItemBookingInfo> itemRespons = new ArrayList<>();
         List<Long> itemIds = items.stream().map(ItemDto::getId).collect(Collectors.toList());
 
         List<BookingDto> bookingDtos = bookingRepository.getApprovedBookingsInItems(itemIds);
         List<CommentDto> commentDtos = commentRepository.getCommentsInItemIds(itemIds);
 
         for (ItemDto itemDto : items) {
-            ItemResponse itemResponse = ItemMapper.toItemResponse(itemDto);
+            ItemBookingInfo itemBookingInfo = ItemMapper.toItemResponse(itemDto);
             List<Comment> commentByItemId = commentDtos
                     .stream()
                     .filter(x -> x.getItemDto().getId().equals(itemDto.getId()))
@@ -120,15 +120,15 @@ public class ItemServiceImpl implements ItemService {
                         .stream()
                         .filter(x -> x.getItem().getId().equals(itemDto.getId()))
                         .collect(Collectors.toList());
-                setBookingsForItemResponse(itemResponse, bookings);
+                setBookingsForItemResponse(itemBookingInfo, bookings);
             }
-            itemResponse.setComments(commentByItemId);
-            itemResponses.add(itemResponse);
+            itemBookingInfo.setComments(commentByItemId);
+            itemRespons.add(itemBookingInfo);
         }
-        return itemResponses;
+        return itemRespons;
     }
 
-    private void setBookingsForItemResponse(ItemResponse itemResponse, List<BookingDto> bookings) {
+    private void setBookingsForItemResponse(ItemBookingInfo itemBookingInfo, List<BookingDto> bookings) {
         Optional<BookingDto> nextBooking = bookings
                 .stream()
                 .filter(x -> x.getStartDate().isAfter(LocalDateTime.now()))
@@ -140,11 +140,11 @@ public class ItemServiceImpl implements ItemService {
                 .findFirst();
         nextBooking
                 .ifPresent(bookingDto ->
-                        itemResponse
+                        itemBookingInfo
                                 .setNextBooking(new BookingInfo(bookingDto.getId(), bookingDto.getBooker().getId())));
         lastBooking
                 .ifPresent(bookingDto ->
-                        itemResponse
+                        itemBookingInfo
                                 .setLastBooking(new BookingInfo(bookingDto.getId(), bookingDto.getBooker().getId())));
     }
 

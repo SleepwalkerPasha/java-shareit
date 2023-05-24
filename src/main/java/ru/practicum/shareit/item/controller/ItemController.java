@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.practicum.shareit.item.model.BasicInfo;
 import ru.practicum.shareit.item.model.Comment;
 import ru.practicum.shareit.item.model.Item;
-import ru.practicum.shareit.item.model.ItemResponse;
+import ru.practicum.shareit.item.model.ItemBookingInfo;
 import ru.practicum.shareit.item.service.ItemService;
 
 import java.util.List;
@@ -37,12 +37,12 @@ public class ItemController {
     }
 
     @GetMapping("/{itemId}")
-    public ItemResponse getItem(@PathVariable long itemId, @RequestHeader(name = "X-Sharer-User-Id") long userId) {
+    public ItemBookingInfo getItem(@PathVariable long itemId, @RequestHeader(name = "X-Sharer-User-Id") long userId) {
         return service.getItem(itemId, userId);
     }
 
     @GetMapping
-    public List<ItemResponse> getAllItems(@RequestHeader(name = "X-Sharer-User-Id") long userId) {
+    public List<ItemBookingInfo> getAllItems(@RequestHeader(name = "X-Sharer-User-Id") long userId) {
         return service.getAllUserItems(userId);
     }
 
