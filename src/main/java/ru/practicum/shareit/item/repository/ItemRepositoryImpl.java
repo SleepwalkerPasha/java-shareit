@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import ru.practicum.shareit.item.dto.ItemDto;
 
+import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -37,5 +38,15 @@ public class ItemRepositoryImpl implements ItemRepository {
     @Override
     public Page<ItemDto> getUserItemsByUserId(long userId, Pageable pageable) {
         return jpaItemRepository.findAllUserItemsByUserId(userId, pageable);
+    }
+
+    @Override
+    public List<ItemDto> getItemsByDescription(String description) {
+        return jpaItemRepository.findAllItemsBySubstring(description);
+    }
+
+    @Override
+    public List<ItemDto> getUserItemsByUserId(long userId) {
+        return jpaItemRepository.findAllUserItemsByUserId(userId);
     }
 }

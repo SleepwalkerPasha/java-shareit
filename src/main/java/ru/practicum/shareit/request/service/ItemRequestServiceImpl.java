@@ -46,13 +46,20 @@ public class ItemRequestServiceImpl implements ItemRequestService {
     }
 
     @Override
-    public List<ItemRequest> getAllRequests(long userId, int from, int size) {
+    public List<ItemRequest> getAllRequests(long userId, Integer from, Integer size) {
         checkForUser(userId);
-        Pageable pageable = PageRequest.of(from, size, Sort.by("created").descending());
-        return itemRequestRepository.getAllRequests(userId, pageable)
-                .stream()
-                .map(ItemReqMapper::toItemRequest)
-                .collect(Collectors.toList());
+        if (from != null && size != null) {
+            Pageable pageable = PageRequest.of(from, size, Sort.by("created").descending());
+            return itemRequestRepository.getAllRequests(userId, pageable)
+                    .stream()
+                    .map(ItemReqMapper::toItemRequest)
+                    .collect(Collectors.toList());
+        } else {
+            return itemRequestRepository.getAllRequests(userId)
+                    .stream()
+                    .map(ItemReqMapper::toItemRequest)
+                    .collect(Collectors.toList());
+        }
     }
 
     @Override

@@ -16,4 +16,7 @@ public interface ItemRequestRepository {
     Page<ItemRequestDto> getAllRequests(long userId, Pageable pageable);
 
     Optional<ItemRequestDto> getRequestById(long userId, long requestId);
+
+    List<ItemRequestDto> getAllRequests(long userId);
+
 }

@@ -1,7 +1,6 @@
 package ru.practicum.shareit.booking.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -88,28 +87,55 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<Booking> getBookingsByUserId(long userId, BookingState state, int from, int size) {
-        Page<BookingDto> returnedList;
+    public List<Booking> getBookingsByUserId(long userId, BookingState state, Integer from, Integer size) {
+        List<BookingDto> returnedList;
         checkForUser(userId);
-        Pageable pageable = PageRequest.of(from, size);
+        Pageable pageable = null;
+        if (from != null && size != null) {
+            pageable = PageRequest.of(from, size);
+        }
         switch (state) {
             case PAST:
-                returnedList = bookingRepository.getPastBookingsByUserId(userId, pageable);
+                if (pageable != null) {
+                    returnedList = bookingRepository.getPastBookingsByUserId(userId, pageable).toList();
+                } else {
+                    returnedList = bookingRepository.getPastBookingsByUserId(userId);
+                }
                 break;
             case FUTURE:
-                returnedList = bookingRepository.getFutureBookingsByUserId(userId, pageable);
+                if (pageable != null) {
+                    returnedList = bookingRepository.getFutureBookingsByUserId(userId, pageable).toList();
+                } else {
+                    returnedList = bookingRepository.getFutureBookingsByUserId(userId);
+                }
                 break;
             case CURRENT:
-                returnedList = bookingRepository.getCurrentBookingsByUserId(userId, pageable);
+                if (pageable != null) {
+                    returnedList = bookingRepository.getCurrentBookingsByUserId(userId, pageable).toList();
+                } else {
+                    returnedList = bookingRepository.getCurrentBookingsByUserId(userId);
+                }
                 break;
             case WAITING:
-                returnedList = bookingRepository.getWaitingBookingsByUserId(userId, pageable);
+                if (pageable != null) {
+                    returnedList = bookingRepository.getWaitingBookingsByUserId(userId, pageable).toList();
+                } else {
+                    returnedList = bookingRepository.getWaitingBookingsByUserId(userId);
+                }
                 break;
             case REJECTED:
-                returnedList = bookingRepository.getRejectedBookingsByUserId(userId, pageable);
+                if (pageable != null) {
+                    returnedList = bookingRepository.getRejectedBookingsByUserId(userId, pageable).toList();
+                } else {
+                    returnedList = bookingRepository.getRejectedBookingsByUserId(userId);
+                }
                 break;
             case ALL:
-                returnedList = bookingRepository.getAllBookingsByUserId(userId, pageable);
+                if (pageable != null) {
+                    returnedList = bookingRepository.getAllBookingsByUserId(userId, pageable).toList();
+                } else {
+                    returnedList = bookingRepository.getAllBookingsByUserId(userId);
+                }
                 break;
             default:
                 throw new UnsupportedStatusException("Unknown state: UNSUPPORTED_STATUS");
@@ -121,28 +147,55 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<Booking> getBookingsByOwnerId(long ownerId, BookingState state, int from, int size) {
-        Page<BookingDto> returnedList;
+    public List<Booking> getBookingsByOwnerId(long ownerId, BookingState state, Integer from, Integer size) {
+        List<BookingDto> returnedList;
         checkForUser(ownerId);
-        Pageable pageRequest = PageRequest.of(from, size);
+        Pageable pageRequest = null;
+        if (from != null && size != null) {
+            pageRequest = PageRequest.of(from, size);
+        }
         switch (state) {
             case PAST:
-                returnedList = bookingRepository.getPastBookingsByOwnerId(ownerId, pageRequest);
+                if (pageRequest != null) {
+                    returnedList = bookingRepository.getPastBookingsByOwnerId(ownerId, pageRequest).toList();
+                } else {
+                    returnedList = bookingRepository.getPastBookingsByOwnerId(ownerId);
+                }
                 break;
             case FUTURE:
-                returnedList = bookingRepository.getFutureBookingsByOwnerId(ownerId, pageRequest);
+                if (pageRequest != null) {
+                    returnedList = bookingRepository.getFutureBookingsByOwnerId(ownerId, pageRequest).toList();
+                } else {
+                    returnedList = bookingRepository.getFutureBookingsByOwnerId(ownerId);
+                }
                 break;
             case CURRENT:
-                returnedList = bookingRepository.getCurrentBookingsByOwnerId(ownerId, pageRequest);
+                if (pageRequest != null) {
+                    returnedList = bookingRepository.getCurrentBookingsByOwnerId(ownerId, pageRequest).toList();
+                } else {
+                    returnedList = bookingRepository.getCurrentBookingsByOwnerId(ownerId);
+                }
                 break;
             case WAITING:
-                returnedList = bookingRepository.getWaitingBookingsByOwnerId(ownerId, pageRequest);
+                if (pageRequest != null) {
+                    returnedList = bookingRepository.getWaitingBookingsByOwnerId(ownerId, pageRequest).toList();
+                } else {
+                    returnedList = bookingRepository.getWaitingBookingsByOwnerId(ownerId);
+                }
                 break;
             case REJECTED:
-                returnedList = bookingRepository.getRejectedBookingsByOwnerId(ownerId, pageRequest);
+                if (pageRequest != null) {
+                    returnedList = bookingRepository.getRejectedBookingsByOwnerId(ownerId, pageRequest).toList();
+                } else {
+                    returnedList = bookingRepository.getRejectedBookingsByOwnerId(ownerId);
+                }
                 break;
             case ALL:
-                returnedList = bookingRepository.getAllBookingsByOwnerId(ownerId, pageRequest);
+                if (pageRequest != null) {
+                    returnedList = bookingRepository.getAllBookingsByOwnerId(ownerId, pageRequest).toList();
+                } else {
+                    returnedList = bookingRepository.getAllBookingsByOwnerId(ownerId);
+                }
                 break;
             default:
                 throw new UnsupportedStatusException("Unknown state: UNSUPPORTED_STATUS");
