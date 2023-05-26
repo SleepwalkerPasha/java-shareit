@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import ru.practicum.shareit.request.model.ItemRequest;
 import ru.practicum.shareit.user.model.User;
 
 import javax.validation.constraints.NotBlank;
@@ -34,7 +33,7 @@ public class Item {
 
     User owner;
 
-    ItemRequest request;
+    Long requestId;
 
     List<Comment> comments;
 }

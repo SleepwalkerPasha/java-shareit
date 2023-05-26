@@ -1,5 +1,7 @@
 package ru.practicum.shareit.booking.repository;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import ru.practicum.shareit.booking.dto.BookingDto;
 
 import java.util.List;
@@ -17,29 +19,29 @@ public interface BookingRepository {
 
     Optional<BookingDto> getBookingByIdOfOwnerId(long ownerId, long bookingId);
 
-    List<BookingDto> getPastBookingsByOwnerId(long ownerId);
+    Page<BookingDto> getPastBookingsByOwnerId(long ownerId, Pageable pageable);
 
-    List<BookingDto> getCurrentBookingsByOwnerId(long ownerId);
+    Page<BookingDto> getCurrentBookingsByOwnerId(long ownerId, Pageable pageable);
 
-    List<BookingDto> getAllBookingsByOwnerId(long ownerId);
+    Page<BookingDto> getAllBookingsByOwnerId(long ownerId, Pageable pageable);
 
-    List<BookingDto> getFutureBookingsByOwnerId(long ownerId);
+    Page<BookingDto> getFutureBookingsByOwnerId(long ownerId, Pageable pageable);
 
-    List<BookingDto> getWaitingBookingsByOwnerId(long ownerId);
+    Page<BookingDto> getWaitingBookingsByOwnerId(long ownerId, Pageable pageable);
 
-    List<BookingDto> getRejectedBookingsByOwnerId(long ownerId);
+    Page<BookingDto> getRejectedBookingsByOwnerId(long ownerId, Pageable pageable);
 
-    List<BookingDto> getPastBookingsByUserId(long userId);
+    Page<BookingDto> getPastBookingsByUserId(long userId, Pageable pageable);
 
-    List<BookingDto> getCurrentBookingsByUserId(long userId);
+    Page<BookingDto> getCurrentBookingsByUserId(long userId, Pageable pageable);
 
-    List<BookingDto> getAllBookingsByUserId(long userId);
+    Page<BookingDto> getAllBookingsByUserId(long userId, Pageable pageable);
 
-    List<BookingDto> getFutureBookingsByUserId(long userId);
+    Page<BookingDto> getFutureBookingsByUserId(long userId, Pageable pageable);
 
-    List<BookingDto> getWaitingBookingsByUserId(long userId);
+    Page<BookingDto> getWaitingBookingsByUserId(long userId, Pageable pageable);
 
-    List<BookingDto> getRejectedBookingsByUserId(long userId);
+    Page<BookingDto> getRejectedBookingsByUserId(long userId, Pageable pageable);
 
     List<BookingDto> getApprovedBookingsByItemId(long itemId);
 

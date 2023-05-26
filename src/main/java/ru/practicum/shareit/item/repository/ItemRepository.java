@@ -1,8 +1,9 @@
 package ru.practicum.shareit.item.repository;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import ru.practicum.shareit.item.dto.ItemDto;
 
-import java.util.List;
 import java.util.Optional;
 
 public interface ItemRepository {
@@ -13,7 +14,7 @@ public interface ItemRepository {
 
     Optional<ItemDto> getItem(long itemId);
 
-    List<ItemDto> getItemsByDescription(String description);
+    Page<ItemDto> getItemsByDescription(String description, Pageable pageable);
 
-    List<ItemDto> getUserItemsByUserId(long userId);
+    Page<ItemDto> getUserItemsByUserId(long userId, Pageable pageable);
 }

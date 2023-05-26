@@ -17,7 +17,7 @@ public class ItemMapper {
             item.setDescription(itemDto.getDescription());
         }
         if (itemDto.getItemRequest() != null) {
-            item.setRequest(ItemReqMapper.toItemRequest(itemDto.getItemRequest()));
+            item.setRequestId(ItemReqMapper.toItemRequest(itemDto.getItemRequest()).getId());
         }
         if (itemDto.getAvailable() != null) {
             item.setAvailable(itemDto.getAvailable());
@@ -38,9 +38,6 @@ public class ItemMapper {
         }
         if (item.getDescription() != null) {
             itemDto.setDescription(item.getDescription());
-        }
-        if (item.getRequest() != null) {
-            itemDto.setItemRequest(ItemReqMapper.toItemRequestDto(item.getRequest()));
         }
         if (item.getAvailable() != null) {
             itemDto.setAvailable(item.getAvailable());

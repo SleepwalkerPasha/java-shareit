@@ -42,13 +42,18 @@ public class ItemController {
     }
 
     @GetMapping
-    public List<ItemBookingInfo> getAllItems(@RequestHeader(name = "X-Sharer-User-Id") long userId) {
-        return service.getAllUserItems(userId);
+    public List<ItemBookingInfo> getAllItems(@RequestHeader(name = "X-Sharer-User-Id") long userId,
+                                             @RequestParam(name = "from", defaultValue = "0", required = false) int from,
+                                             @RequestParam(name = "size", required = false) int size) {
+        return service.getAllUserItems(userId, from, size);
     }
 
     @GetMapping("/search")
-    public List<Item> getItemByDescription(@RequestParam(name = "text") String text, @RequestHeader(name = "X-Sharer-User-Id") long userId) {
-        return service.getItemByDescription(text, userId);
+    public List<Item> getItemByDescription(@RequestParam(name = "text") String text,
+                                           @RequestHeader(name = "X-Sharer-User-Id") long userId,
+                                           @RequestParam(name = "from", defaultValue = "0", required = false) int from,
+                                           @RequestParam(name = "size", required = false) int size) {
+        return service.getItemByDescription(text, userId, from, size);
     }
 
     @PostMapping("/{itemId}/comment")

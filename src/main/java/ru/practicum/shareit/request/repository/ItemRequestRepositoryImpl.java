@@ -1,6 +1,8 @@
 package ru.practicum.shareit.request.repository;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import ru.practicum.shareit.request.dto.ItemRequestDto;
 
@@ -23,11 +25,11 @@ public class ItemRequestRepositoryImpl implements ItemRequestRepository {
         return jpaItemRequestRepository.findAllByRequestor_IdOrderByCreatedDesc(userId);
     }
 
-    // todo add pageable method
     @Override
-    public List<ItemRequestDto> getAllRequests(long userId, long from, long size) {
-        return jpaItemRequestRepository.;
+    public Page<ItemRequestDto> getAllRequests(long userId, Pageable pageable) {
+        return jpaItemRequestRepository.findAllItemRequests(pageable);
     }
+
 
     @Override
     public Optional<ItemRequestDto> getRequestById(long userId, long requestId) {
