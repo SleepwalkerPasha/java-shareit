@@ -23,5 +23,5 @@ public class ItemResponse {
 
     User owner;
 
-    ItemRequest request;
+    Long requestId;
 }

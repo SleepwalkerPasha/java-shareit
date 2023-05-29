@@ -12,9 +12,13 @@ public interface JpaItemRequestRepository extends JpaRepository<ItemRequestDto, 
 
     List<ItemRequestDto> findAllByRequestor_IdOrderByCreatedDesc(long userId);
 
-    Page<ItemRequestDto> findAllItemRequests(Pageable pageable);
+    @Query("select ir from ItemRequestDto ir " +
+            "where ir.requestor.id != ?1 " +
+            "order by ir.created desc")
+    Page<ItemRequestDto> findAllItemRequests(long userId, Pageable pageable);
 
     @Query("select ir from ItemRequestDto ir " +
+            "where ir.requestor.id != ?1 " +
             "order by ir.created desc")
-    List<ItemRequestDto> findAllItemRequests();
+    List<ItemRequestDto> findAllItemRequests(long userId);
 }

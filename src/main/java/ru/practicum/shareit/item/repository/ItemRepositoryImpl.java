@@ -49,4 +49,14 @@ public class ItemRepositoryImpl implements ItemRepository {
     public List<ItemDto> getUserItemsByUserId(long userId) {
         return jpaItemRepository.findAllUserItemsByUserId(userId);
     }
+
+    @Override
+    public List<ItemDto> getItemsByItemRequestId(long requestId) {
+        return jpaItemRepository.findAllByItemRequest_Id(requestId);
+    }
+
+    @Override
+    public List<ItemDto> getItemsInRequestIds(List<Long> requestIds) {
+        return jpaItemRepository.findAllInItemRequests(requestIds);
+    }
 }

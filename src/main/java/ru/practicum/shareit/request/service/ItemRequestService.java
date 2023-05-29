@@ -8,7 +8,7 @@ public interface ItemRequestService {
 
     ItemRequest addRequest(long userId, ItemRequest request);
 
-    List<ItemRequest> getAllRequestsByUserId(long userId);
+    List<ItemRequest> getAllRequestsByOwnerId(long userId);
 
     List<ItemRequest> getAllRequests(long userId, Integer from, Integer size);
 

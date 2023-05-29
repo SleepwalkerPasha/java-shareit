@@ -27,7 +27,7 @@ public class ItemRequestRepositoryImpl implements ItemRequestRepository {
 
     @Override
     public Page<ItemRequestDto> getAllRequests(long userId, Pageable pageable) {
-        return jpaItemRequestRepository.findAllItemRequests(pageable);
+        return jpaItemRequestRepository.findAllItemRequests(userId, pageable);
     }
 
 
@@ -38,6 +38,6 @@ public class ItemRequestRepositoryImpl implements ItemRequestRepository {
 
     @Override
     public List<ItemRequestDto> getAllRequests(long userId) {
-        return jpaItemRequestRepository.findAllItemRequests();
+        return jpaItemRequestRepository.findAllItemRequests(userId);
     }
 }

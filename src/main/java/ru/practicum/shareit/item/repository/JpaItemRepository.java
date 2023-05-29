@@ -27,4 +27,10 @@ public interface JpaItemRepository extends JpaRepository<ItemDto, Long> {
             "join i.owner as u " +
             "where u.id = ?1")
     List<ItemDto> findAllUserItemsByUserId(long userId);
+
+    List<ItemDto> findAllByItemRequest_Id(long requestId);
+
+    @Query("select i from ItemDto i " +
+            "where i.itemRequest.id in ?1")
+    List<ItemDto> findAllInItemRequests(List<Long> requestIds);
 }

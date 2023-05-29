@@ -22,4 +22,8 @@ public interface ItemRepository {
     List<ItemDto> getItemsByDescription(String description);
 
     List<ItemDto> getUserItemsByUserId(long userId);
+
+    List<ItemDto> getItemsByItemRequestId(long requestId);
+
+    List<ItemDto> getItemsInRequestIds(List<Long> requestIds);
 }

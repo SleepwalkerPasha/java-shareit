@@ -17,22 +17,28 @@ import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.model.ItemBookingInfo;
 import ru.practicum.shareit.item.service.ItemService;
 
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.PositiveOrZero;
 import java.util.List;
 
 @RestController
 @RequestMapping(path = "/items")
 @RequiredArgsConstructor
+@Validated
 public class ItemController {
 
     private final ItemService service;
 
     @PostMapping
-    public Item addItem(@RequestBody @Validated(BasicInfo.class) Item item, @RequestHeader(name = "X-Sharer-User-Id") long userId) {
+    public Item addItem(@RequestBody @Validated(BasicInfo.class) Item item,
+                        @RequestHeader(name = "X-Sharer-User-Id") long userId) {
         return service.addItem(item, userId);
     }
 
     @PatchMapping("/{itemId}")
-    public Item updateItem(@RequestBody @Validated Item item, @PathVariable long itemId, @RequestHeader(name = "X-Sharer-User-Id") long userId) {
+    public Item updateItem(@RequestBody @Validated Item item,
+                           @PathVariable long itemId,
+                           @RequestHeader(name = "X-Sharer-User-Id") long userId) {
         return service.updateItem(item, itemId, userId);
     }
 
@@ -43,21 +49,27 @@ public class ItemController {
 
     @GetMapping
     public List<ItemBookingInfo> getAllItems(@RequestHeader(name = "X-Sharer-User-Id") long userId,
-                                             @RequestParam(name = "from", defaultValue = "0", required = false) int from,
-                                             @RequestParam(name = "size", required = false) int size) {
+                                             @RequestParam(name = "from", defaultValue = "0", required = false)
+                                             @PositiveOrZero Integer from,
+                                             @RequestParam(name = "size", required = false)
+                                             @Positive Integer size) {
         return service.getAllUserItems(userId, from, size);
     }
 
     @GetMapping("/search")
     public List<Item> getItemByDescription(@RequestParam(name = "text") String text,
                                            @RequestHeader(name = "X-Sharer-User-Id") long userId,
-                                           @RequestParam(name = "from", defaultValue = "0", required = false) int from,
-                                           @RequestParam(name = "size", required = false) int size) {
+                                           @RequestParam(name = "from", defaultValue = "0", required = false)
+                                           @PositiveOrZero Integer from,
+                                           @RequestParam(name = "size", required = false)
+                                           @Positive Integer size) {
         return service.getItemByDescription(text, userId, from, size);
     }
 
     @PostMapping("/{itemId}/comment")
-    public Comment addCommentToItem(@PathVariable long itemId, @RequestHeader(name = "X-Sharer-User-Id") long userId, @RequestBody @Validated Comment comment) {
+    public Comment addCommentToItem(@PathVariable long itemId,
+                                    @RequestHeader(name = "X-Sharer-User-Id") long userId,
+                                    @RequestBody @Validated Comment comment) {
         return service.addCommentToItem(itemId, userId, comment);
     }
 }

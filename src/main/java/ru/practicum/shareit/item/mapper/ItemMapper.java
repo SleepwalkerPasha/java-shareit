@@ -3,7 +3,6 @@ package ru.practicum.shareit.item.mapper;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.model.ItemBookingInfo;
-import ru.practicum.shareit.request.mapper.ItemReqMapper;
 import ru.practicum.shareit.user.mapper.UserMapper;
 
 public class ItemMapper {
@@ -17,7 +16,7 @@ public class ItemMapper {
             item.setDescription(itemDto.getDescription());
         }
         if (itemDto.getItemRequest() != null) {
-            item.setRequestId(ItemReqMapper.toItemRequest(itemDto.getItemRequest()).getId());
+            item.setRequestId(itemDto.getItemRequest().getId());
         }
         if (itemDto.getAvailable() != null) {
             item.setAvailable(itemDto.getAvailable());

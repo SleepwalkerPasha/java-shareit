@@ -17,12 +17,15 @@ import ru.practicum.shareit.booking.model.BookingState;
 import ru.practicum.shareit.booking.service.BookingService;
 import ru.practicum.shareit.exception.NotValidBookingRequestException;
 
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.PositiveOrZero;
 import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
 @RequestMapping(path = "/bookings")
 @RequiredArgsConstructor
+@Validated
 public class BookingController {
 
     private final BookingService bookingService;
@@ -50,8 +53,10 @@ public class BookingController {
                                              @RequestParam(name = "state",
                                                      required = false,
                                                      defaultValue = "ALL") BookingState state,
-                                             @RequestParam(name = "from", defaultValue = "0", required = false) int from,
-                                             @RequestParam(name = "size", required = false) int size) {
+                                             @RequestParam(name = "from", required = false)
+                                             @PositiveOrZero Integer from,
+                                             @RequestParam(name = "size", required = false)
+                                             @Positive Integer size) {
         return bookingService.getBookingsByUserId(userId, state, from, size);
     }
 
@@ -60,8 +65,10 @@ public class BookingController {
                                               @RequestParam(name = "state",
                                                       required = false,
                                                       defaultValue = "ALL") BookingState state,
-                                              @RequestParam(name = "from", defaultValue = "0", required = false) int from,
-                                              @RequestParam(name = "size", required = false) int size) {
+                                              @RequestParam(name = "from", required = false)
+                                              @PositiveOrZero Integer from,
+                                              @RequestParam(name = "size", required = false)
+                                              @Positive Integer size) {
         return bookingService.getBookingsByOwnerId(userId, state, from, size);
     }
 

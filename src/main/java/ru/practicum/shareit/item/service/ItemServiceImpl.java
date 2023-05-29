@@ -2,6 +2,7 @@ package ru.practicum.shareit.item.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.booking.dto.BookingDto;
@@ -20,6 +21,8 @@ import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.model.ItemBookingInfo;
 import ru.practicum.shareit.item.repository.CommentRepository;
 import ru.practicum.shareit.item.repository.ItemRepository;
+import ru.practicum.shareit.request.dto.ItemRequestDto;
+import ru.practicum.shareit.request.repository.ItemRequestRepository;
 import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.mapper.UserMapper;
 import ru.practicum.shareit.user.repository.UserRepository;
@@ -43,12 +46,22 @@ public class ItemServiceImpl implements ItemService {
 
     private final BookingRepository bookingRepository;
 
+    private final ItemRequestRepository itemRequestRepository;
+
     @Override
     public Item addItem(Item item, long userId) {
         UserDto userDto = checkForUser(userId);
         item.setOwner(UserMapper.toUser(userDto));
-        ItemDto itemDto = itemRepository.addItem(ItemMapper.toItemDto(item));
-        return ItemMapper.toItem(itemDto);
+        ItemDto itemDto = ItemMapper.toItemDto(item);
+        Long requestId = item.getRequestId();
+        if (requestId != null) {
+            Optional<ItemRequestDto> requestById = itemRequestRepository.getRequestById(userId, requestId);
+            if (requestById.isEmpty()) {
+                throw new NotFoundException("такого запроса на вещь нет");
+            }
+            itemDto.setItemRequest(requestById.get());
+        }
+        return ItemMapper.toItem(itemRepository.addItem(itemDto));
     }
 
     @Override
@@ -99,12 +112,21 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<ItemBookingInfo> getAllUserItems(long userId, int from, int size) {
+    public List<ItemBookingInfo> getAllUserItems(long userId, Integer from, Integer size) {
         checkForUser(userId);
-        List<ItemDto> items = itemRepository.getUserItemsByUserId(userId, PageRequest.of(from, size))
-                .stream()
-                .collect(Collectors.toList());
-        List<ItemBookingInfo> itemRespons = new ArrayList<>();
+        Pageable pageable = null;
+        if (from != null && size != null) {
+            pageable = PageRequest.of(from, size);
+        }
+        List<ItemDto> items;
+        if (pageable != null) {
+            items = itemRepository.getUserItemsByUserId(userId, pageable)
+                    .stream()
+                    .collect(Collectors.toList());
+        } else {
+            items = itemRepository.getUserItemsByUserId(userId);
+        }
+        List<ItemBookingInfo> itemResponseList = new ArrayList<>();
         List<Long> itemIds = items.stream().map(ItemDto::getId).collect(Collectors.toList());
 
         List<BookingDto> bookingDtos = bookingRepository.getApprovedBookingsInItems(itemIds);
@@ -126,9 +148,9 @@ public class ItemServiceImpl implements ItemService {
                 setBookingsForItemResponse(itemBookingInfo, bookings);
             }
             itemBookingInfo.setComments(commentByItemId);
-            itemRespons.add(itemBookingInfo);
+            itemResponseList.add(itemBookingInfo);
         }
-        return itemRespons;
+        return itemResponseList;
     }
 
     private void setBookingsForItemResponse(ItemBookingInfo itemBookingInfo, List<BookingDto> bookings) {
@@ -152,15 +174,27 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public List<Item> getItemByDescription(String description, long userId, int from, int size) {
+    public List<Item> getItemByDescription(String description, long userId, Integer from, Integer size) {
+        Pageable pageable = null;
+        if (from != null && size != null) {
+            pageable = PageRequest.of(from, size);
+        }
+
         if (description.isBlank()) {
             return new ArrayList<>();
         }
-        return itemRepository
-                .getItemsByDescription(description.toLowerCase(), PageRequest.of(from, size))
-                .stream()
-                .map(ItemMapper::toItem)
-                .collect(Collectors.toList());
+        if (pageable != null) {
+            return itemRepository
+                    .getItemsByDescription(description.toLowerCase(), pageable)
+                    .stream()
+                    .map(ItemMapper::toItem)
+                    .collect(Collectors.toList());
+        } else {
+            return itemRepository.getItemsByDescription(description.toLowerCase())
+                    .stream()
+                    .map(ItemMapper::toItem)
+                    .collect(Collectors.toList());
+        }
     }
 
     @Override

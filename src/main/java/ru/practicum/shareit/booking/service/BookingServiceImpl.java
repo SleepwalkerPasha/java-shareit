@@ -3,6 +3,7 @@ package ru.practicum.shareit.booking.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.booking.dto.BookingDto;
@@ -92,7 +93,7 @@ public class BookingServiceImpl implements BookingService {
         checkForUser(userId);
         Pageable pageable = null;
         if (from != null && size != null) {
-            pageable = PageRequest.of(from, size);
+            pageable = PageRequest.of(from / size, size, Sort.by("endDate").descending());
         }
         switch (state) {
             case PAST:
@@ -152,7 +153,7 @@ public class BookingServiceImpl implements BookingService {
         checkForUser(ownerId);
         Pageable pageRequest = null;
         if (from != null && size != null) {
-            pageRequest = PageRequest.of(from, size);
+            pageRequest = PageRequest.of(from / size, size, Sort.by("endDate").descending());
         }
         switch (state) {
             case PAST:
