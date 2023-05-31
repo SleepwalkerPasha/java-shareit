@@ -79,10 +79,12 @@ public class BookingServiceImpl implements BookingService {
     public Booking getBookingById(long userId, long bookingId) {
         checkForUser(userId);
         Optional<BookingDto> bookingDto = bookingRepository.getBookingByIdOfOwnerId(userId, bookingId);
-        if (bookingDto.isEmpty())
+        if (bookingDto.isEmpty()) {
             bookingDto = bookingRepository.getBookingByIdOfUserId(userId, bookingId);
-        if (bookingDto.isEmpty())
+        }
+        if (bookingDto.isEmpty()) {
             throw new NotFoundException("данный пользователь не брал вещь в аренду");
+        }
         return BookingMapper.toBooking(bookingDto.get());
     }
 

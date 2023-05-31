@@ -32,7 +32,7 @@ public class ItemRequestRepositoryImpl implements ItemRequestRepository {
 
 
     @Override
-    public Optional<ItemRequestDto> getRequestById(long userId, long requestId) {
+    public Optional<ItemRequestDto> getRequestById(long requestId) {
         return jpaItemRequestRepository.findById(requestId);
     }
 

@@ -55,7 +55,7 @@ public class ItemServiceImpl implements ItemService {
         ItemDto itemDto = ItemMapper.toItemDto(item);
         Long requestId = item.getRequestId();
         if (requestId != null) {
-            Optional<ItemRequestDto> requestById = itemRequestRepository.getRequestById(userId, requestId);
+            Optional<ItemRequestDto> requestById = itemRequestRepository.getRequestById(requestId);
             if (requestById.isEmpty()) {
                 throw new NotFoundException("такого запроса на вещь нет");
             }
@@ -175,11 +175,11 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public List<Item> getItemByDescription(String description, long userId, Integer from, Integer size) {
+        checkForUser(userId);
         Pageable pageable = null;
         if (from != null && size != null) {
             pageable = PageRequest.of(from, size);
         }
-
         if (description.isBlank()) {
             return new ArrayList<>();
         }

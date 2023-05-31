@@ -75,7 +75,7 @@ public class ItemRequestServiceImpl implements ItemRequestService {
     @Override
     public ItemRequest getRequestById(long userId, long requestId) {
         checkForUser(userId);
-        Optional<ItemRequestDto> requestById = itemRequestRepository.getRequestById(userId, requestId);
+        Optional<ItemRequestDto> requestById = itemRequestRepository.getRequestById(requestId);
         if (requestById.isEmpty())
             throw new NotFoundException("такого запроса не существует");
         List<ItemResponse> items = itemRepository.getItemsByItemRequestId(requestId)
