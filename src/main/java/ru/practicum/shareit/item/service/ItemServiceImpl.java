@@ -174,7 +174,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public List<Item> getItemByDescription(String description, long userId, Integer from, Integer size) {
+    public List<Item> getItemsByDescription(String description, long userId, Integer from, Integer size) {
         checkForUser(userId);
         Pageable pageable = null;
         if (from != null && size != null) {

@@ -189,7 +189,7 @@ class ItemServiceImplTest {
 
     @Test
     void testGetItemByDescription() {
-        List<Item> allUserItems = itemService.getItemByDescription("desc", 2L, null, null);
+        List<Item> allUserItems = itemService.getItemsByDescription("desc", 2L, null, null);
 
         assertThat(allUserItems.size(), equalTo(1));
         assertThat(allUserItems.get(0).getId(), equalTo(1L));

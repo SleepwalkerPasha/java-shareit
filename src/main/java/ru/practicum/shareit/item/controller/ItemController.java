@@ -57,13 +57,13 @@ public class ItemController {
     }
 
     @GetMapping("/search")
-    public List<Item> getItemByDescription(@RequestParam(name = "text") String text,
-                                           @RequestHeader(name = "X-Sharer-User-Id") long userId,
-                                           @RequestParam(name = "from", defaultValue = "0", required = false)
+    public List<Item> getItemsByDescription(@RequestParam(name = "text") String text,
+                                            @RequestHeader(name = "X-Sharer-User-Id") long userId,
+                                            @RequestParam(name = "from", defaultValue = "0", required = false)
                                            @PositiveOrZero Integer from,
-                                           @RequestParam(name = "size", required = false)
+                                            @RequestParam(name = "size", required = false)
                                            @Positive Integer size) {
-        return service.getItemByDescription(text, userId, from, size);
+        return service.getItemsByDescription(text, userId, from, size);
     }
 
     @PostMapping("/{itemId}/comment")

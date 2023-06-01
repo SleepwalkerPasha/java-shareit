@@ -83,7 +83,7 @@ public class ItemServiceTest {
     @Rollback
     @Transactional
     void testGetItemsByDescription() {
-        List<Item> itemByDescription = itemService.getItemByDescription("desc", booker.getId(), 0, 5);
+        List<Item> itemByDescription = itemService.getItemsByDescription("desc", booker.getId(), 0, 5);
 
         assertThat(itemByDescription.size(), equalTo(1));
         assertThat(itemByDescription.get(0).getId(), equalTo(addedItem.getId()));
