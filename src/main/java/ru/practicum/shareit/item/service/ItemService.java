@@ -8,9 +8,9 @@ import java.util.List;
 
 public interface ItemService {
 
-    Item addItem(Item itemDto, long userId);
+    Item addItem(Item item, long userId);
 
-    Item updateItem(Item itemDto, long itemId, long userId);
+    Item updateItem(Item item, long itemId, long userId);
 
     ItemBookingInfo getItem(long itemId, long userId);
 
