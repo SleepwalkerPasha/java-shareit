@@ -9,6 +9,7 @@ import ru.practicum.shareit.user.model.User;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -35,5 +36,5 @@ public class Item {
 
     Long requestId;
 
-    List<Comment> comments;
+    List<Comment> comments = new ArrayList<>();
 }

@@ -8,6 +8,7 @@ import lombok.experimental.FieldDefaults;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -32,5 +33,5 @@ public class ItemBookingInfo {
 
     BookingInfo nextBooking;
 
-    List<Comment> comments;
+    List<Comment> comments = new ArrayList<>();
 }

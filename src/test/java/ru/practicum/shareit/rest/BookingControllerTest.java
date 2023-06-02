@@ -9,6 +9,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.util.LinkedMultiValueMap;
 import ru.practicum.shareit.booking.controller.BookingController;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.model.BookingRequest;
@@ -145,24 +146,48 @@ public class BookingControllerTest {
         when(bookingService.getBookingsByUserId(anyLong(), any(), anyInt(), anyInt())).thenReturn(List.of(booking));
 
         HttpHeaders headers = new HttpHeaders();
+        LinkedMultiValueMap<String, String> requestParams = new LinkedMultiValueMap<>();
+        requestParams.add("state", "WAITING");
+        requestParams.add("from", "0");
+        requestParams.add("size", "5");
         headers.set("X-Sharer-User-Id", booker.getId().toString());
+
         mockMvc.perform(get("/bookings")
                         .headers(headers)
+                        .params(requestParams)
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk());
-        // todo refactor
-//                .andExpect(jsonPath("$id", is(booking.getId()), Long.class))
-//                .andExpect(content().json("{}"))
-//                .andExpect(jsonPath("$.item.id", is(booking.getItem().getId()), Long.class))
-//                .andExpect(jsonPath("$.booker.id", is(booking.getBooker().getId()), Long.class))
-//                .andExpect(jsonPath("$.status", is(booking.getStatus().toString())));
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].id", is(booking.getId()), Long.class))
+                .andExpect(jsonPath("$[0].item.id", is(booking.getItem().getId()), Long.class))
+                .andExpect(jsonPath("$[0].booker.id", is(booking.getBooker().getId()), Long.class))
+                .andExpect(jsonPath("$[0].status", is(booking.getStatus().toString())));
     }
 
     @Test
-    void testGetAllBookingsOfUser() {
+    void testGetAllBookingsOfUser() throws Exception {
+        when(bookingService.getBookingsByOwnerId(anyLong(), any(), anyInt(), anyInt())).thenReturn(List.of(booking));
 
+        HttpHeaders headers = new HttpHeaders();
+        LinkedMultiValueMap<String, String> requestParams = new LinkedMultiValueMap<>();
+        requestParams.add("state", "WAITING");
+        requestParams.add("from", "0");
+        requestParams.add("size", "5");
+        headers.set("X-Sharer-User-Id", owner.getId().toString());
+
+        mockMvc.perform(get("/bookings/owner")
+                        .headers(headers)
+                        .params(requestParams)
+                        .characterEncoding(StandardCharsets.UTF_8)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].id", is(booking.getId()), Long.class))
+                .andExpect(jsonPath("$[0].item.id", is(booking.getItem().getId()), Long.class))
+                .andExpect(jsonPath("$[0].item.owner.id", is(booking.getItem().getOwner().getId()), Long.class))
+                .andExpect(jsonPath("$[0].booker.id", is(booking.getBooker().getId()), Long.class))
+                .andExpect(jsonPath("$[0].status", is(booking.getStatus().toString())));
     }
 
 }
