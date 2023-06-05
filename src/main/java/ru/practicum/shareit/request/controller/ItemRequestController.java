@@ -27,7 +27,8 @@ public class ItemRequestController {
     private final ItemRequestService itemRequestService;
 
     @PostMapping
-    public ItemRequest addRequest(@RequestHeader(name = "X-Sharer-User-Id") long userId, @Validated @RequestBody ItemRequest request) {
+    public ItemRequest addRequest(@RequestHeader(name = "X-Sharer-User-Id") long userId,
+                                  @Validated @RequestBody ItemRequest request) {
         return itemRequestService.addRequest(userId, request);
     }
 
@@ -38,15 +39,16 @@ public class ItemRequestController {
 
     @GetMapping("/all")
     public List<ItemRequest> getAllRequests(@RequestHeader(name = "X-Sharer-User-Id") long userId,
-                                            @RequestParam(name = "from", defaultValue = "0", required = false)
+                                            @RequestParam(name = "from", defaultValue = "0")
                                             @PositiveOrZero Integer from,
-                                            @RequestParam(name = "size", required = false)
+                                            @RequestParam(name = "size", defaultValue = "20")
                                             @Positive Integer size) {
         return itemRequestService.getAllRequests(userId, from, size);
     }
 
     @GetMapping("/{requestId}")
-    public ItemRequest getRequestById(@RequestHeader(name = "X-Sharer-User-Id") long userId, @PathVariable long requestId) {
+    public ItemRequest getRequestById(@RequestHeader(name = "X-Sharer-User-Id") long userId,
+                                      @PathVariable long requestId) {
         return itemRequestService.getRequestById(userId, requestId);
     }
 }

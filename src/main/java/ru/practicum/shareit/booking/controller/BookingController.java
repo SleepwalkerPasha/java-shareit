@@ -53,9 +53,9 @@ public class BookingController {
                                              @RequestParam(name = "state",
                                                      required = false,
                                                      defaultValue = "ALL") BookingState state,
-                                             @RequestParam(name = "from", required = false)
+                                             @RequestParam(name = "from", defaultValue = "0")
                                              @PositiveOrZero Integer from,
-                                             @RequestParam(name = "size", required = false)
+                                             @RequestParam(name = "size", defaultValue = "20")
                                              @Positive Integer size) {
         return bookingService.getBookingsByUserId(userId, state, from, size);
     }
@@ -65,9 +65,9 @@ public class BookingController {
                                               @RequestParam(name = "state",
                                                       required = false,
                                                       defaultValue = "ALL") BookingState state,
-                                              @RequestParam(name = "from", required = false)
+                                              @RequestParam(name = "from", defaultValue = "0")
                                               @PositiveOrZero Integer from,
-                                              @RequestParam(name = "size", required = false)
+                                              @RequestParam(name = "size", defaultValue = "20")
                                               @Positive Integer size) {
         return bookingService.getBookingsByOwnerId(userId, state, from, size);
     }

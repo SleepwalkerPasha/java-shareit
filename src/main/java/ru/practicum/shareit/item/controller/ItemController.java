@@ -49,9 +49,9 @@ public class ItemController {
 
     @GetMapping
     public List<ItemBookingInfo> getAllItems(@RequestHeader(name = "X-Sharer-User-Id") long userId,
-                                             @RequestParam(name = "from", defaultValue = "0", required = false)
+                                             @RequestParam(name = "from", defaultValue = "0")
                                              @PositiveOrZero Integer from,
-                                             @RequestParam(name = "size", required = false)
+                                             @RequestParam(name = "size", defaultValue = "20")
                                              @Positive Integer size) {
         return service.getAllUserItems(userId, from, size);
     }
@@ -59,9 +59,9 @@ public class ItemController {
     @GetMapping("/search")
     public List<Item> getItemsByDescription(@RequestParam(name = "text") String text,
                                             @RequestHeader(name = "X-Sharer-User-Id") long userId,
-                                            @RequestParam(name = "from", defaultValue = "0", required = false)
+                                            @RequestParam(name = "from", defaultValue = "0")
                                            @PositiveOrZero Integer from,
-                                            @RequestParam(name = "size", required = false)
+                                            @RequestParam(name = "size", defaultValue = "20")
                                            @Positive Integer size) {
         return service.getItemsByDescription(text, userId, from, size);
     }

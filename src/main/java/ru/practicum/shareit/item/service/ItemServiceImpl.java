@@ -3,6 +3,7 @@ package ru.practicum.shareit.item.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.booking.dto.BookingDto;
@@ -106,10 +107,7 @@ public class ItemServiceImpl implements ItemService {
     @Transactional(readOnly = true)
     public List<ItemBookingInfo> getAllUserItems(long userId, Integer from, Integer size) {
         checkForUser(userId);
-        Pageable pageable = null;
-        if (from != null && size != null) {
-            pageable = PageRequest.of(from, size);
-        }
+        Pageable pageable = PageRequester.of(from, size);
         List<ItemDto> items;
         if (pageable != null) {
             items = itemRepository.getUserItemsByUserId(userId, pageable)
@@ -168,10 +166,7 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public List<Item> getItemsByDescription(String description, long userId, Integer from, Integer size) {
         checkForUser(userId);
-        Pageable pageable = null;
-        if (from != null && size != null) {
-            pageable = PageRequest.of(from, size);
-        }
+        Pageable pageable = PageRequester.of(from, size);
         if (description.isBlank()) {
             return new ArrayList<>();
         }
@@ -235,6 +230,16 @@ public class ItemServiceImpl implements ItemService {
             throw new NotFoundException("такого пользователя нет");
         } else {
             return userById.get();
+        }
+    }
+
+    public static class PageRequester {
+        public static Pageable of(Integer from, Integer size) {
+            return of(from, size, Sort.unsorted());
+        }
+
+        public static Pageable of(Integer from, Integer size, Sort sort) {
+            return (from != null && size != null) ? PageRequest.of(from / size, size, sort) : null;
         }
     }
 }

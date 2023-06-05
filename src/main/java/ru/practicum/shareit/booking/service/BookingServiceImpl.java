@@ -1,7 +1,6 @@
 package ru.practicum.shareit.booking.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -20,6 +19,7 @@ import ru.practicum.shareit.exception.UnsupportedStatusException;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.mapper.ItemMapper;
 import ru.practicum.shareit.item.repository.ItemRepository;
+import ru.practicum.shareit.item.service.ItemServiceImpl;
 import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.mapper.UserMapper;
 import ru.practicum.shareit.user.repository.UserRepository;
@@ -93,10 +93,7 @@ public class BookingServiceImpl implements BookingService {
     public List<Booking> getBookingsByUserId(long userId, BookingState state, Integer from, Integer size) {
         List<BookingDto> returnedList;
         checkForUser(userId);
-        Pageable pageable = null;
-        if (from != null && size != null) {
-            pageable = PageRequest.of(from / size, size, Sort.by("endDate").descending());
-        }
+        Pageable pageable = ItemServiceImpl.PageRequester.of(from, size, Sort.by("endDate").descending());
         switch (state) {
             case PAST:
                 if (pageable != null) {
@@ -153,10 +150,7 @@ public class BookingServiceImpl implements BookingService {
     public List<Booking> getBookingsByOwnerId(long ownerId, BookingState state, Integer from, Integer size) {
         List<BookingDto> returnedList;
         checkForUser(ownerId);
-        Pageable pageRequest = null;
-        if (from != null && size != null) {
-            pageRequest = PageRequest.of(from / size, size, Sort.by("endDate").descending());
-        }
+        Pageable pageRequest = ItemServiceImpl.PageRequester.of(from, size, Sort.by("endDate").descending());
         switch (state) {
             case PAST:
                 if (pageRequest != null) {
