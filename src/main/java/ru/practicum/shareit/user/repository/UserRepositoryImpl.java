@@ -19,7 +19,7 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public UserDto updateUser(UserDto updatedUser, long userId) {
+    public UserDto updateUser(UserDto updatedUser) {
         return jpaUserRepository.save(updatedUser);
     }
 

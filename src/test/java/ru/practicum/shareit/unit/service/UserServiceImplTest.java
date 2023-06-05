@@ -1,4 +1,4 @@
-package ru.practicum.shareit.unit;
+package ru.practicum.shareit.unit.service;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -71,7 +71,7 @@ class UserServiceImplTest {
         info.setName(newName);
         info.setEmail("email@mail.ru");
 
-        when(userRepository.updateUser(any(), anyLong())).thenReturn(info);
+        when(userRepository.updateUser(any())).thenReturn(info);
 
         User updatedUser = userService.updateUser(UserMapper.toUser(info), info.getId());
         assertThat(updatedUser.getId(), equalTo(1L));

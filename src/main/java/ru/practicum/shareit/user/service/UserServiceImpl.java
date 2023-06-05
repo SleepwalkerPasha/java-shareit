@@ -28,7 +28,7 @@ public class UserServiceImpl implements UserService {
         Optional<User> userById = getUserById(userId);
         if (userById.isEmpty())
             throw new NotFoundException(String.format("юзера с таким id %d нет", userId));
-        updateUser = UserMapper.toUser(userRepository.updateUser(UserMapper.toUserDto(updateUserNameAndEmail(updateUser, userById.get())), userId));
+        updateUser = UserMapper.toUser(userRepository.updateUser(UserMapper.toUserDto(updateUserNameAndEmail(updateUser, userById.get()))));
         return updateUser;
     }
 

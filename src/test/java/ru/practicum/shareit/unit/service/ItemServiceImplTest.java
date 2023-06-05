@@ -1,4 +1,4 @@
-package ru.practicum.shareit.unit;
+package ru.practicum.shareit.unit.service;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

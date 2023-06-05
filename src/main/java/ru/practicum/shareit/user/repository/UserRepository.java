@@ -9,7 +9,7 @@ public interface UserRepository {
 
     UserDto addUser(UserDto user);
 
-    UserDto updateUser(UserDto updatedUser, long userId);
+    UserDto updateUser(UserDto updatedUser);
 
     Optional<UserDto> getUserById(long userId);
 
