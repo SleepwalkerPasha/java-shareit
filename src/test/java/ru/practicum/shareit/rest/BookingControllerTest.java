@@ -103,6 +103,62 @@ public class BookingControllerTest {
     }
 
     @Test
+    void addBookingInvalidValidationStartAfterEndDate() throws Exception {
+        startDate = LocalDateTime.now();
+        endDate = LocalDateTime.now().minusDays(2);
+        BookingRequest bookingRequest = new BookingRequest(item.getId(), startDate, endDate);
+
+        when(bookingService.addBooking(anyLong(), any())).thenReturn(booking);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("X-Sharer-User-Id", booker.getId().toString());
+        mockMvc.perform(post("/bookings")
+                        .content(objectMapper.writeValueAsString(bookingRequest))
+                        .headers(headers)
+                        .characterEncoding(StandardCharsets.UTF_8)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void addBookingInvalidValidationStartDateEqualsEndDate() throws Exception {
+        startDate = LocalDateTime.now();
+        endDate = startDate;
+        BookingRequest bookingRequest = new BookingRequest(item.getId(), startDate, endDate);
+
+        when(bookingService.addBooking(anyLong(), any())).thenReturn(booking);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("X-Sharer-User-Id", booker.getId().toString());
+        mockMvc.perform(post("/bookings")
+                        .content(objectMapper.writeValueAsString(bookingRequest))
+                        .headers(headers)
+                        .characterEncoding(StandardCharsets.UTF_8)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void addBookingInvalidValidationStartBeforeNow() throws Exception {
+        startDate = LocalDateTime.now().minusDays(2);
+        BookingRequest bookingRequest = new BookingRequest(item.getId(), startDate, endDate);
+
+        when(bookingService.addBooking(anyLong(), any())).thenReturn(booking);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("X-Sharer-User-Id", booker.getId().toString());
+        mockMvc.perform(post("/bookings")
+                        .content(objectMapper.writeValueAsString(bookingRequest))
+                        .headers(headers)
+                        .characterEncoding(StandardCharsets.UTF_8)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
     void testApproveBooking() throws Exception {
         booking = new Booking(1L, startDate, endDate, item, booker, BookingStatus.APPROVED);
 

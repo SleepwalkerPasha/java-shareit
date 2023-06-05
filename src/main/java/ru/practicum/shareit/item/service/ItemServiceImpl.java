@@ -67,10 +67,8 @@ public class ItemServiceImpl implements ItemService {
     @Override
     @Transactional
     public Item updateItem(Item item, long itemId, long userId) {
-        checkNewItem(item);
         checkForUser(userId);
         Optional<ItemDto> oldItemOpt = itemRepository.getItem(itemId);
-
         if (oldItemOpt.isEmpty()) {
             throw new NotFoundException(String.format("итема с таким id = %d нет у юзера %d", itemId, userId));
         }
@@ -83,12 +81,6 @@ public class ItemServiceImpl implements ItemService {
         return ItemMapper.toItem(itemDto);
     }
 
-    private void checkNewItem(Item item) {
-        if ((item.getName() != null && item.getName().isBlank())
-                || (item.getDescription() != null && item.getDescription().isBlank())) {
-            throw new IllegalArgumentException("описание и название итема не могут быть пустыми");
-        }
-    }
 
     @Override
     @Transactional(readOnly = true)

@@ -8,6 +8,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.model.BookingStatus;
 import ru.practicum.shareit.booking.repository.BookingRepositoryImpl;
+import ru.practicum.shareit.exception.ConflictException;
+import ru.practicum.shareit.exception.UnavailableItemException;
 import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.mapper.ItemMapper;
@@ -22,11 +24,13 @@ import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.repository.UserRepositoryImpl;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -164,6 +168,22 @@ class ItemServiceImplTest {
     }
 
     @Test
+    void testUpdateItemMadeByBooker() {
+        String name = "newItem";
+        String description = "description 2";
+        Item newItem = new Item();
+        newItem.setName(name);
+        newItem.setDescription(description);
+        newItem.setAvailable(false);
+
+        assertThrows(ConflictException.class, () -> itemService.updateItem(newItem, 1L, 2L));
+
+        verify(itemRepository, times(1)).getItem(anyLong());
+        verify(userRepository, times(1)).getUserById(anyLong());
+        verify(itemRepository, times(0)).updateItem(any());
+    }
+
+    @Test
     void testGetItem() {
         ItemBookingInfo item = itemService.getItem(1L, 1L);
 
@@ -219,5 +239,25 @@ class ItemServiceImplTest {
         verify(itemRepository, times(1)).getItem(anyLong());
         verify(bookingRepository, times(1)).getBookingsByItemIdAndUserId(anyLong(), anyLong());
         verify(commentRepository, times(1)).addComment(any());
+    }
+
+    @Test
+    void testAddCommentToItemWithoutBooking() {
+        String text = "comment text";
+        Comment comment = new Comment();
+        comment.setText(text);
+
+        CommentDto commentDto = new CommentDto();
+        commentDto.setId(2L);
+        commentDto.setText(text);
+        commentDto.setCreated(LocalDateTime.now());
+
+        when(bookingRepository.getBookingsByItemIdAndUserId(anyLong(), anyLong())).thenReturn(new ArrayList<>());
+
+        assertThrows(UnavailableItemException.class, () -> itemService.addCommentToItem(1L, 2L, comment));
+
+        verify(itemRepository, times(1)).getItem(anyLong());
+        verify(bookingRepository, times(1)).getBookingsByItemIdAndUserId(anyLong(), anyLong());
+        verify(commentRepository, times(0)).addComment(any());
     }
 }
