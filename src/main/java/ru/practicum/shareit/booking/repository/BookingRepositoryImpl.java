@@ -1,6 +1,8 @@
 package ru.practicum.shareit.booking.repository;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import ru.practicum.shareit.booking.dto.BookingDto;
 
@@ -40,63 +42,63 @@ public class BookingRepositoryImpl implements BookingRepository {
 
 
     @Override
-    public List<BookingDto> getPastBookingsByOwnerId(long ownerId) {
-        return jpaBookingRepository.findAllPastOwnerBookings(ownerId);
+    public Page<BookingDto> getPastBookingsByOwnerId(long ownerId, Pageable pageable) {
+        return jpaBookingRepository.findAllPastOwnerBookings(ownerId, pageable);
     }
 
     @Override
-    public List<BookingDto> getCurrentBookingsByOwnerId(long ownerId) {
-        return jpaBookingRepository.findAllCurrentOwnerBookings(ownerId);
+    public Page<BookingDto> getCurrentBookingsByOwnerId(long ownerId, Pageable pageable) {
+        return jpaBookingRepository.findAllCurrentOwnerBookings(ownerId, pageable);
     }
 
     @Override
-    public List<BookingDto> getAllBookingsByOwnerId(long ownerId) {
-        return jpaBookingRepository.findAllByOwnerId(ownerId);
+    public Page<BookingDto> getAllBookingsByOwnerId(long ownerId, Pageable pageable) {
+        return jpaBookingRepository.findAllByOwnerId(ownerId, pageable);
     }
 
     @Override
-    public List<BookingDto> getFutureBookingsByOwnerId(long ownerId) {
-        return jpaBookingRepository.findAllFutureOwnerBookings(ownerId);
+    public Page<BookingDto> getFutureBookingsByOwnerId(long ownerId, Pageable pageable) {
+        return jpaBookingRepository.findAllFutureOwnerBookings(ownerId, pageable);
     }
 
     @Override
-    public List<BookingDto> getWaitingBookingsByOwnerId(long ownerId) {
-        return jpaBookingRepository.findAllWaitingOwnerBookings(ownerId);
+    public Page<BookingDto> getWaitingBookingsByOwnerId(long ownerId, Pageable pageable) {
+        return jpaBookingRepository.findAllWaitingOwnerBookings(ownerId, pageable);
     }
 
     @Override
-    public List<BookingDto> getRejectedBookingsByOwnerId(long ownerId) {
-        return jpaBookingRepository.findAllRejectedOwnerBookings(ownerId);
+    public Page<BookingDto> getRejectedBookingsByOwnerId(long ownerId, Pageable pageable) {
+        return jpaBookingRepository.findAllRejectedOwnerBookings(ownerId, pageable);
     }
 
     @Override
-    public List<BookingDto> getPastBookingsByUserId(long userId) {
-        return jpaBookingRepository.findAllPastBookings(userId);
+    public Page<BookingDto> getPastBookingsByUserId(long userId, Pageable pageable) {
+        return jpaBookingRepository.findAllPastBookings(userId, pageable);
     }
 
     @Override
-    public List<BookingDto> getCurrentBookingsByUserId(long userId) {
-        return jpaBookingRepository.findAllCurrentBookings(userId);
+    public Page<BookingDto> getCurrentBookingsByUserId(long userId, Pageable pageable) {
+        return jpaBookingRepository.findAllCurrentBookings(userId, pageable);
     }
 
     @Override
-    public List<BookingDto> getAllBookingsByUserId(long userId) {
-        return jpaBookingRepository.findAllByBookerId(userId);
+    public Page<BookingDto> getAllBookingsByUserId(long userId, Pageable pageable) {
+        return jpaBookingRepository.findAllByBookerId(userId, pageable);
     }
 
     @Override
-    public List<BookingDto> getFutureBookingsByUserId(long userId) {
-        return jpaBookingRepository.findAllFutureBookings(userId);
+    public Page<BookingDto> getFutureBookingsByUserId(long userId, Pageable pageable) {
+        return jpaBookingRepository.findAllFutureBookings(userId, pageable);
     }
 
     @Override
-    public List<BookingDto> getWaitingBookingsByUserId(long userId) {
-        return jpaBookingRepository.findAllWaitingBookings(userId);
+    public Page<BookingDto> getWaitingBookingsByUserId(long userId, Pageable pageable) {
+        return jpaBookingRepository.findAllWaitingBookings(userId, pageable);
     }
 
     @Override
-    public List<BookingDto> getRejectedBookingsByUserId(long userId) {
-        return jpaBookingRepository.findAllRejectedBookings(userId);
+    public Page<BookingDto> getRejectedBookingsByUserId(long userId, Pageable pageable) {
+        return jpaBookingRepository.findAllRejectedBookings(userId, pageable);
     }
 
     @Override

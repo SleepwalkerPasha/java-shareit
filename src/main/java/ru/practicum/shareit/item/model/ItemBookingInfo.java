@@ -8,13 +8,14 @@ import lombok.experimental.FieldDefaults;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class ItemResponse {
+public class ItemBookingInfo {
     Long id;
 
     @NotNull(groups = BasicInfo.class)
@@ -32,5 +33,5 @@ public class ItemResponse {
 
     BookingInfo nextBooking;
 
-    List<Comment> comments;
+    List<Comment> comments = new ArrayList<>();
 }

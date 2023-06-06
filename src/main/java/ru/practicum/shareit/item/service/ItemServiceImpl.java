@@ -1,6 +1,9 @@
 package ru.practicum.shareit.item.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.booking.dto.BookingDto;
@@ -16,9 +19,11 @@ import ru.practicum.shareit.item.mapper.ItemMapper;
 import ru.practicum.shareit.item.model.BookingInfo;
 import ru.practicum.shareit.item.model.Comment;
 import ru.practicum.shareit.item.model.Item;
-import ru.practicum.shareit.item.model.ItemResponse;
+import ru.practicum.shareit.item.model.ItemBookingInfo;
 import ru.practicum.shareit.item.repository.CommentRepository;
 import ru.practicum.shareit.item.repository.ItemRepository;
+import ru.practicum.shareit.request.dto.ItemRequestDto;
+import ru.practicum.shareit.request.repository.ItemRequestRepository;
 import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.mapper.UserMapper;
 import ru.practicum.shareit.user.repository.UserRepository;
@@ -42,21 +47,29 @@ public class ItemServiceImpl implements ItemService {
 
     private final BookingRepository bookingRepository;
 
+    private final ItemRequestRepository itemRequestRepository;
+
     @Override
     public Item addItem(Item item, long userId) {
         UserDto userDto = checkForUser(userId);
         item.setOwner(UserMapper.toUser(userDto));
-        ItemDto itemDto = itemRepository.addItem(ItemMapper.toItemDto(item));
-        return ItemMapper.toItem(itemDto);
+        ItemDto itemDto = ItemMapper.toItemDto(item);
+        Long requestId = item.getRequestId();
+        if (requestId != null) {
+            Optional<ItemRequestDto> requestById = itemRequestRepository.getRequestById(requestId);
+            if (requestById.isEmpty()) {
+                throw new NotFoundException("такого запроса на вещь нет");
+            }
+            itemDto.setItemRequest(requestById.get());
+        }
+        return ItemMapper.toItem(itemRepository.addItem(itemDto));
     }
 
     @Override
     @Transactional
     public Item updateItem(Item item, long itemId, long userId) {
-        checkNewItem(item);
         checkForUser(userId);
         Optional<ItemDto> oldItemOpt = itemRepository.getItem(itemId);
-
         if (oldItemOpt.isEmpty()) {
             throw new NotFoundException(String.format("итема с таким id = %d нет у юзера %d", itemId, userId));
         }
@@ -69,16 +82,10 @@ public class ItemServiceImpl implements ItemService {
         return ItemMapper.toItem(itemDto);
     }
 
-    private void checkNewItem(Item item) {
-        if ((item.getName() != null && item.getName().isBlank())
-                || (item.getDescription() != null && item.getDescription().isBlank())) {
-            throw new IllegalArgumentException("описание и название итема не могут быть пустыми");
-        }
-    }
 
     @Override
     @Transactional(readOnly = true)
-    public ItemResponse getItem(long itemId, long userId) {
+    public ItemBookingInfo getItem(long itemId, long userId) {
         Optional<ItemDto> itemDto = itemRepository.getItem(itemId);
         if (itemDto.isEmpty()) {
             throw new NotFoundException(String.format("итема с таким id = %d нет", itemId));
@@ -87,28 +94,31 @@ public class ItemServiceImpl implements ItemService {
                 .stream()
                 .map(CommentMapper::toComment)
                 .collect(Collectors.toList());
-        ItemResponse itemResponse = ItemMapper.toItemResponse(itemDto.get());
+        ItemBookingInfo itemBookingInfo = ItemMapper.toItemResponse(itemDto.get());
         if (itemDto.get().getOwner().getId().equals(userId)) {
-            List<BookingDto> bookings = bookingRepository.getApprovedBookingsByItemId(itemResponse.getId());
-            setBookingsForItemResponse(itemResponse, bookings);
+            List<BookingDto> bookings = bookingRepository.getApprovedBookingsByItemId(itemBookingInfo.getId());
+            setBookingsForItemResponse(itemBookingInfo, bookings);
         }
-        itemResponse.setComments(commentByItemId);
-        return itemResponse;
+        itemBookingInfo.setComments(commentByItemId);
+        return itemBookingInfo;
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<ItemResponse> getAllUserItems(long userId) {
+    public List<ItemBookingInfo> getAllUserItems(long userId, Integer from, Integer size) {
         checkForUser(userId);
-        List<ItemDto> items = itemRepository.getUserItemsByUserId(userId);
-        List<ItemResponse> itemResponses = new ArrayList<>();
+        Pageable pageable = PageRequester.of(from, size);
+        List<ItemDto> items = itemRepository.getUserItemsByUserId(userId, pageable)
+                .stream()
+                .collect(Collectors.toList());
+        List<ItemBookingInfo> itemResponseList = new ArrayList<>();
         List<Long> itemIds = items.stream().map(ItemDto::getId).collect(Collectors.toList());
 
         List<BookingDto> bookingDtos = bookingRepository.getApprovedBookingsInItems(itemIds);
         List<CommentDto> commentDtos = commentRepository.getCommentsInItemIds(itemIds);
 
         for (ItemDto itemDto : items) {
-            ItemResponse itemResponse = ItemMapper.toItemResponse(itemDto);
+            ItemBookingInfo itemBookingInfo = ItemMapper.toItemResponse(itemDto);
             List<Comment> commentByItemId = commentDtos
                     .stream()
                     .filter(x -> x.getItemDto().getId().equals(itemDto.getId()))
@@ -120,15 +130,15 @@ public class ItemServiceImpl implements ItemService {
                         .stream()
                         .filter(x -> x.getItem().getId().equals(itemDto.getId()))
                         .collect(Collectors.toList());
-                setBookingsForItemResponse(itemResponse, bookings);
+                setBookingsForItemResponse(itemBookingInfo, bookings);
             }
-            itemResponse.setComments(commentByItemId);
-            itemResponses.add(itemResponse);
+            itemBookingInfo.setComments(commentByItemId);
+            itemResponseList.add(itemBookingInfo);
         }
-        return itemResponses;
+        return itemResponseList;
     }
 
-    private void setBookingsForItemResponse(ItemResponse itemResponse, List<BookingDto> bookings) {
+    private void setBookingsForItemResponse(ItemBookingInfo itemBookingInfo, List<BookingDto> bookings) {
         Optional<BookingDto> nextBooking = bookings
                 .stream()
                 .filter(x -> x.getStartDate().isAfter(LocalDateTime.now()))
@@ -140,21 +150,23 @@ public class ItemServiceImpl implements ItemService {
                 .findFirst();
         nextBooking
                 .ifPresent(bookingDto ->
-                        itemResponse
+                        itemBookingInfo
                                 .setNextBooking(new BookingInfo(bookingDto.getId(), bookingDto.getBooker().getId())));
         lastBooking
                 .ifPresent(bookingDto ->
-                        itemResponse
+                        itemBookingInfo
                                 .setLastBooking(new BookingInfo(bookingDto.getId(), bookingDto.getBooker().getId())));
     }
 
     @Override
-    public List<Item> getItemByDescription(String description, long userId) {
+    public List<Item> getItemsByDescription(String description, long userId, Integer from, Integer size) {
+        checkForUser(userId);
+        Pageable pageable = PageRequester.of(from, size);
         if (description.isBlank()) {
             return new ArrayList<>();
         }
         return itemRepository
-                .getItemsByDescription(description.toLowerCase())
+                .getItemsByDescription(description.toLowerCase(), pageable)
                 .stream()
                 .map(ItemMapper::toItem)
                 .collect(Collectors.toList());
@@ -206,6 +218,16 @@ public class ItemServiceImpl implements ItemService {
             throw new NotFoundException("такого пользователя нет");
         } else {
             return userById.get();
+        }
+    }
+
+    public static class PageRequester {
+        public static Pageable of(Integer from, Integer size) {
+            return of(from, size, Sort.unsorted());
+        }
+
+        public static Pageable of(Integer from, Integer size, Sort sort) {
+            return (from != null && size != null) ? PageRequest.of(from / size, size, sort) : null;
         }
     }
 }
