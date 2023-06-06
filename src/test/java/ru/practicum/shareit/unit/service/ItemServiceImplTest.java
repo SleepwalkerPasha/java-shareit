@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.PageImpl;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.model.BookingStatus;
 import ru.practicum.shareit.booking.repository.BookingRepositoryImpl;
@@ -107,7 +108,7 @@ class ItemServiceImplTest {
 
         when(itemRepository.updateItem(any())).thenReturn(itemDto);
 
-        when(itemRepository.getUserItemsByUserId(anyLong())).thenReturn(List.of(itemDto));
+        when(itemRepository.getUserItemsByUserId(anyLong(), any())).thenReturn(new PageImpl<>(List.of(itemDto)));
 
         when(commentRepository.getCommentsByItemId(1L)).thenReturn(List.of(comment));
 
@@ -117,7 +118,7 @@ class ItemServiceImplTest {
 
         when(bookingRepository.getApprovedBookingsInItems(anyList())).thenReturn(List.of(bookingDtoApproved));
 
-        when(itemRepository.getItemsByDescription(anyString())).thenReturn(List.of(itemDto));
+        when(itemRepository.getItemsByDescription(anyString(), any())).thenReturn(new PageImpl<>(List.of(itemDto)));
 
         when(bookingRepository.getBookingsByItemIdAndUserId(anyLong(), anyLong())).thenReturn(List.of(bookingDtoApproved));
     }
@@ -196,26 +197,24 @@ class ItemServiceImplTest {
 
     @Test
     void testGetAllUserItems() {
-        List<ItemBookingInfo> allUserItems = itemService.getAllUserItems(1L, null, null);
+        List<ItemBookingInfo> allUserItems = itemService.getAllUserItems(1L, 0, 5);
 
         assertThat(allUserItems.size(), equalTo(1));
         assertThat(allUserItems.get(0).getId(), equalTo(1L));
 
-        verify(itemRepository, times(1)).getUserItemsByUserId(anyLong());
-        verify(itemRepository, times(0)).getUserItemsByUserId(anyLong(), any());
+        verify(itemRepository, times(1)).getUserItemsByUserId(anyLong(), any());
         verify(bookingRepository, times(1)).getApprovedBookingsInItems(anyList());
         verify(commentRepository, times(1)).getCommentsInItemIds(anyList());
     }
 
     @Test
     void testGetItemByDescription() {
-        List<Item> allUserItems = itemService.getItemsByDescription("desc", 2L, null, null);
+        List<Item> allUserItems = itemService.getItemsByDescription("desc", 2L, 0, 5);
 
         assertThat(allUserItems.size(), equalTo(1));
         assertThat(allUserItems.get(0).getId(), equalTo(1L));
 
-        verify(itemRepository, times(1)).getItemsByDescription(anyString());
-        verify(itemRepository, times(0)).getItemsByDescription(anyString(), any());
+        verify(itemRepository, times(1)).getItemsByDescription(anyString(), any());
     }
 
     @Test

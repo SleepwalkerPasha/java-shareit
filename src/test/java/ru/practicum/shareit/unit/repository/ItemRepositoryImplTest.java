@@ -65,27 +65,19 @@ class ItemRepositoryImplTest {
 
     @Test
     void testGetUserItemsByUserId() {
-        when(jpaItemRepository.findAllUserItemsByUserId(anyLong())).thenReturn(List.of(itemDto));
         when(jpaItemRepository.findAllUserItemsByUserId(anyLong(), any())).thenReturn(new PageImpl<>(List.of(itemDto)));
 
         Page<ItemDto> pageItems = itemRepository.getUserItemsByUserId(ownerDto.getId(), PageRequest.of(0, 5));
-        List<ItemDto> items = itemRepository.getUserItemsByUserId(ownerDto.getId());
 
-        assertThat(items.size(), equalTo(1));
         assertThat(pageItems.getSize(), equalTo(1));
-        assertThat(items.get(0), equalTo(itemDto));
     }
 
     @Test
     void testGetItemsByDescription() {
-        when(jpaItemRepository.findAllItemsBySubstring(anyString())).thenReturn(List.of(itemDto));
         when(jpaItemRepository.findAllItemsBySubstring(anyString(), any())).thenReturn(new PageImpl<>(List.of(itemDto)));
 
         Page<ItemDto> pageItems = itemRepository.getItemsByDescription("desc", PageRequest.of(0, 5));
-        List<ItemDto> items = itemRepository.getItemsByDescription("desc");
 
-        assertThat(items.size(), equalTo(1));
         assertThat(pageItems.getSize(), equalTo(1));
-        assertThat(items.get(0), equalTo(itemDto));
     }
 }

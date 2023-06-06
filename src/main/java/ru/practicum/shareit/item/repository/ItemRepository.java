@@ -19,10 +19,6 @@ public interface ItemRepository {
 
     Page<ItemDto> getUserItemsByUserId(long userId, Pageable pageable);
 
-    List<ItemDto> getItemsByDescription(String description);
-
-    List<ItemDto> getUserItemsByUserId(long userId);
-
     List<ItemDto> getItemsByItemRequestId(long requestId);
 
     List<ItemDto> getItemsInRequestIds(List<Long> requestIds);

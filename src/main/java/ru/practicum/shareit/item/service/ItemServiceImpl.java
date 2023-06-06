@@ -108,14 +108,9 @@ public class ItemServiceImpl implements ItemService {
     public List<ItemBookingInfo> getAllUserItems(long userId, Integer from, Integer size) {
         checkForUser(userId);
         Pageable pageable = PageRequester.of(from, size);
-        List<ItemDto> items;
-        if (pageable != null) {
-            items = itemRepository.getUserItemsByUserId(userId, pageable)
-                    .stream()
-                    .collect(Collectors.toList());
-        } else {
-            items = itemRepository.getUserItemsByUserId(userId);
-        }
+        List<ItemDto> items = itemRepository.getUserItemsByUserId(userId, pageable)
+                .stream()
+                .collect(Collectors.toList());
         List<ItemBookingInfo> itemResponseList = new ArrayList<>();
         List<Long> itemIds = items.stream().map(ItemDto::getId).collect(Collectors.toList());
 
@@ -170,18 +165,11 @@ public class ItemServiceImpl implements ItemService {
         if (description.isBlank()) {
             return new ArrayList<>();
         }
-        if (pageable != null) {
-            return itemRepository
-                    .getItemsByDescription(description.toLowerCase(), pageable)
-                    .stream()
-                    .map(ItemMapper::toItem)
-                    .collect(Collectors.toList());
-        } else {
-            return itemRepository.getItemsByDescription(description.toLowerCase())
-                    .stream()
-                    .map(ItemMapper::toItem)
-                    .collect(Collectors.toList());
-        }
+        return itemRepository
+                .getItemsByDescription(description.toLowerCase(), pageable)
+                .stream()
+                .map(ItemMapper::toItem)
+                .collect(Collectors.toList());
     }
 
     @Override

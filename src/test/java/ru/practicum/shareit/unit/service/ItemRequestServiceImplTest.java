@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.PageImpl;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.repository.ItemRepositoryImpl;
 import ru.practicum.shareit.request.dto.ItemRequestDto;
@@ -75,7 +76,7 @@ class ItemRequestServiceImplTest {
 
         when(itemRequestRepository.getAllRequestsByUserId(anyLong())).thenReturn(List.of(itemRequestDto));
 
-        when(itemRequestRepository.getAllRequests(anyLong())).thenReturn(List.of(itemRequestDto));
+        when(itemRequestRepository.getAllRequests(anyLong(), any())).thenReturn(new PageImpl<>(List.of(itemRequestDto)));
 
         when(itemRequestRepository.getRequestById(anyLong())).thenReturn(Optional.of(itemRequestDto));
     }
@@ -122,15 +123,14 @@ class ItemRequestServiceImplTest {
 
     @Test
     void testGetAllRequests() {
-        List<ItemRequest> allRequestsByOwnerId = itemRequestService.getAllRequests(2L, null, null);
+        List<ItemRequest> allRequestsByOwnerId = itemRequestService.getAllRequests(2L, 0, 5);
 
         assertThat(allRequestsByOwnerId.size(), equalTo(1));
         assertThat(allRequestsByOwnerId.get(0).getId(), equalTo(1L));
         assertThat(allRequestsByOwnerId.get(0).getRequestor().getId(), equalTo(2L));
 
         verify(userRepository, times(1)).getUserById(2L);
-        verify(itemRequestRepository, times(1)).getAllRequests(anyLong());
-        verify(itemRequestRepository, times(0)).getAllRequests(anyLong(), any());
+        verify(itemRequestRepository, times(1)).getAllRequests(anyLong(), any());
         verify(itemRepository, times(1)).getItemsInRequestIds(List.of(1L));
     }
 

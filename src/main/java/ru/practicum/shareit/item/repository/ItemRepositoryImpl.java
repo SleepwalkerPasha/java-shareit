@@ -41,16 +41,6 @@ public class ItemRepositoryImpl implements ItemRepository {
     }
 
     @Override
-    public List<ItemDto> getItemsByDescription(String description) {
-        return jpaItemRepository.findAllItemsBySubstring(description);
-    }
-
-    @Override
-    public List<ItemDto> getUserItemsByUserId(long userId) {
-        return jpaItemRepository.findAllUserItemsByUserId(userId);
-    }
-
-    @Override
     public List<ItemDto> getItemsByItemRequestId(long requestId) {
         return jpaItemRepository.findAllByItemRequest_Id(requestId);
     }

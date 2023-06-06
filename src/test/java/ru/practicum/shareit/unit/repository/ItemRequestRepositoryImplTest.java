@@ -52,15 +52,11 @@ class ItemRequestRepositoryImplTest {
 
     @Test
     void testGetAllRequests() {
-        when(jpaItemRepository.findAllItemRequests(anyLong())).thenReturn(List.of(itemRequestDto));
         when(jpaItemRepository.findAllItemRequests(anyLong(), any())).thenReturn(new PageImpl<>(List.of(itemRequestDto)));
 
-        List<ItemRequestDto> requests = itemRequestRepository.getAllRequests(ownerDto.getId());
         Page<ItemRequestDto> pageRequests = itemRequestRepository.getAllRequests(ownerDto.getId(), PageRequest.of(0, 5));
 
         assertThat(pageRequests.getSize(), equalTo(1));
-        assertThat(requests.size(), equalTo(1));
-        assertThat(requests.get(0), equalTo(itemRequestDto));
     }
 
     @Test

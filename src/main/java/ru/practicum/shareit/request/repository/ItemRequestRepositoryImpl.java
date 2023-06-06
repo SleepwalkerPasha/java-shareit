@@ -36,8 +36,4 @@ public class ItemRequestRepositoryImpl implements ItemRequestRepository {
         return jpaItemRequestRepository.findById(requestId);
     }
 
-    @Override
-    public List<ItemRequestDto> getAllRequests(long userId) {
-        return jpaItemRequestRepository.findAllItemRequests(userId);
-    }
 }

@@ -96,46 +96,22 @@ public class BookingServiceImpl implements BookingService {
         Pageable pageable = ItemServiceImpl.PageRequester.of(from, size, Sort.by("endDate").descending());
         switch (state) {
             case PAST:
-                if (pageable != null) {
-                    returnedList = bookingRepository.getPastBookingsByUserId(userId, pageable).toList();
-                } else {
-                    returnedList = bookingRepository.getPastBookingsByUserId(userId);
-                }
+                returnedList = bookingRepository.getPastBookingsByUserId(userId, pageable).toList();
                 break;
             case FUTURE:
-                if (pageable != null) {
-                    returnedList = bookingRepository.getFutureBookingsByUserId(userId, pageable).toList();
-                } else {
-                    returnedList = bookingRepository.getFutureBookingsByUserId(userId);
-                }
+                returnedList = bookingRepository.getFutureBookingsByUserId(userId, pageable).toList();
                 break;
             case CURRENT:
-                if (pageable != null) {
-                    returnedList = bookingRepository.getCurrentBookingsByUserId(userId, pageable).toList();
-                } else {
-                    returnedList = bookingRepository.getCurrentBookingsByUserId(userId);
-                }
+                returnedList = bookingRepository.getCurrentBookingsByUserId(userId, pageable).toList();
                 break;
             case WAITING:
-                if (pageable != null) {
-                    returnedList = bookingRepository.getWaitingBookingsByUserId(userId, pageable).toList();
-                } else {
-                    returnedList = bookingRepository.getWaitingBookingsByUserId(userId);
-                }
+                returnedList = bookingRepository.getWaitingBookingsByUserId(userId, pageable).toList();
                 break;
             case REJECTED:
-                if (pageable != null) {
-                    returnedList = bookingRepository.getRejectedBookingsByUserId(userId, pageable).toList();
-                } else {
-                    returnedList = bookingRepository.getRejectedBookingsByUserId(userId);
-                }
+                returnedList = bookingRepository.getRejectedBookingsByUserId(userId, pageable).toList();
                 break;
             case ALL:
-                if (pageable != null) {
-                    returnedList = bookingRepository.getAllBookingsByUserId(userId, pageable).toList();
-                } else {
-                    returnedList = bookingRepository.getAllBookingsByUserId(userId);
-                }
+                returnedList = bookingRepository.getAllBookingsByUserId(userId, pageable).toList();
                 break;
             default:
                 throw new UnsupportedStatusException("Unknown state: UNSUPPORTED_STATUS");
@@ -153,46 +129,22 @@ public class BookingServiceImpl implements BookingService {
         Pageable pageRequest = ItemServiceImpl.PageRequester.of(from, size, Sort.by("endDate").descending());
         switch (state) {
             case PAST:
-                if (pageRequest != null) {
-                    returnedList = bookingRepository.getPastBookingsByOwnerId(ownerId, pageRequest).toList();
-                } else {
-                    returnedList = bookingRepository.getPastBookingsByOwnerId(ownerId);
-                }
+                returnedList = bookingRepository.getPastBookingsByOwnerId(ownerId, pageRequest).toList();
                 break;
             case FUTURE:
-                if (pageRequest != null) {
-                    returnedList = bookingRepository.getFutureBookingsByOwnerId(ownerId, pageRequest).toList();
-                } else {
-                    returnedList = bookingRepository.getFutureBookingsByOwnerId(ownerId);
-                }
+                returnedList = bookingRepository.getFutureBookingsByOwnerId(ownerId, pageRequest).toList();
                 break;
             case CURRENT:
-                if (pageRequest != null) {
-                    returnedList = bookingRepository.getCurrentBookingsByOwnerId(ownerId, pageRequest).toList();
-                } else {
-                    returnedList = bookingRepository.getCurrentBookingsByOwnerId(ownerId);
-                }
+                returnedList = bookingRepository.getCurrentBookingsByOwnerId(ownerId, pageRequest).toList();
                 break;
             case WAITING:
-                if (pageRequest != null) {
-                    returnedList = bookingRepository.getWaitingBookingsByOwnerId(ownerId, pageRequest).toList();
-                } else {
-                    returnedList = bookingRepository.getWaitingBookingsByOwnerId(ownerId);
-                }
+                returnedList = bookingRepository.getWaitingBookingsByOwnerId(ownerId, pageRequest).toList();
                 break;
             case REJECTED:
-                if (pageRequest != null) {
-                    returnedList = bookingRepository.getRejectedBookingsByOwnerId(ownerId, pageRequest).toList();
-                } else {
-                    returnedList = bookingRepository.getRejectedBookingsByOwnerId(ownerId);
-                }
+                returnedList = bookingRepository.getRejectedBookingsByOwnerId(ownerId, pageRequest).toList();
                 break;
             case ALL:
-                if (pageRequest != null) {
-                    returnedList = bookingRepository.getAllBookingsByOwnerId(ownerId, pageRequest).toList();
-                } else {
-                    returnedList = bookingRepository.getAllBookingsByOwnerId(ownerId);
-                }
+                returnedList = bookingRepository.getAllBookingsByOwnerId(ownerId, pageRequest).toList();
                 break;
             default:
                 throw new UnsupportedStatusException("Unknown state: UNSUPPORTED_STATUS");

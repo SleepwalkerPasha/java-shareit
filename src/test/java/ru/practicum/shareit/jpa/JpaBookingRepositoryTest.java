@@ -5,6 +5,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.model.BookingStatus;
 import ru.practicum.shareit.booking.repository.JpaBookingRepository;
@@ -109,10 +111,10 @@ class JpaBookingRepositoryTest {
 
     @Test
     void testFindAllPastBookings() {
-        List<BookingDto> allPastBookings = jpaBookingRepository.findAllPastBookings(booker.getId());
+        Page<BookingDto> allPastBookings = jpaBookingRepository.findAllPastBookings(booker.getId(), PageRequest.of(0, 5));
 
-        assertThat(allPastBookings.size(), equalTo(1));
-        assertThat(allPastBookings.get(0), equalTo(bookingDto));
+        assertThat(allPastBookings.getSize(), equalTo(5));
+        assertThat(allPastBookings.getNumberOfElements(), equalTo(1));
     }
 
     @Test
@@ -129,18 +131,18 @@ class JpaBookingRepositoryTest {
 
         testEntityManager.persist(bookingDto);
 
-        List<BookingDto> allCurrentBookings = jpaBookingRepository.findAllCurrentBookings(booker.getId());
+        Page<BookingDto> allCurrentBookings = jpaBookingRepository.findAllCurrentBookings(booker.getId(), PageRequest.of(0, 5));
 
-        assertThat(allCurrentBookings.size(), equalTo(1));
-        assertThat(allCurrentBookings.get(0), equalTo(bookingDto));
+        assertThat(allCurrentBookings.getSize(), equalTo(5));
+        assertThat(allCurrentBookings.getNumberOfElements(), equalTo(1));
     }
 
     @Test
     void testFindAllByBookerId() {
-        List<BookingDto> bookings = jpaBookingRepository.findAllByBookerId(booker.getId());
+        Page<BookingDto> bookings = jpaBookingRepository.findAllByBookerId(booker.getId(), PageRequest.of(0, 5));
 
-        assertThat(bookings.size(), equalTo(1));
-        assertThat(bookings.get(0), equalTo(bookingDto));
+        assertThat(bookings.getSize(), equalTo(5));
+        assertThat(bookings.getNumberOfElements(), equalTo(1));
     }
 
     @Test
@@ -157,18 +159,18 @@ class JpaBookingRepositoryTest {
 
         testEntityManager.persist(bookingDto);
 
-        List<BookingDto> allFutureBookings = jpaBookingRepository.findAllFutureBookings(booker.getId());
+        Page<BookingDto> allFutureBookings = jpaBookingRepository.findAllFutureBookings(booker.getId(), PageRequest.of(0, 5));
 
-        assertThat(allFutureBookings.size(), equalTo(1));
-        assertThat(allFutureBookings.get(0), equalTo(bookingDto));
+        assertThat(allFutureBookings.getSize(), equalTo(5));
+        assertThat(allFutureBookings.getNumberOfElements(), equalTo(1));
     }
 
     @Test
     void testFindAllWaitingBookings() {
-        List<BookingDto> allWaitingBookings = jpaBookingRepository.findAllWaitingBookings(booker.getId());
+        Page<BookingDto> allWaitingBookings = jpaBookingRepository.findAllWaitingBookings(booker.getId(), PageRequest.of(0, 5));
 
-        assertThat(allWaitingBookings.size(), equalTo(1));
-        assertThat(allWaitingBookings.get(0), equalTo(bookingDto));
+        assertThat(allWaitingBookings.getSize(), equalTo(5));
+        assertThat(allWaitingBookings.getNumberOfElements(), equalTo(1));
     }
 
     @Test
@@ -185,18 +187,18 @@ class JpaBookingRepositoryTest {
 
         testEntityManager.persist(bookingDto);
 
-        List<BookingDto> allRejectedBookings = jpaBookingRepository.findAllRejectedBookings(booker.getId());
+        Page<BookingDto> allRejectedBookings = jpaBookingRepository.findAllRejectedBookings(booker.getId(), PageRequest.of(0, 5));
 
-        assertThat(allRejectedBookings.size(), equalTo(1));
-        assertThat(allRejectedBookings.get(0), equalTo(bookingDto));
+        assertThat(allRejectedBookings.getSize(), equalTo(5));
+        assertThat(allRejectedBookings.getNumberOfElements(), equalTo(1));
     }
 
     @Test
     void testFindAllPastOwnerBookings() {
-        List<BookingDto> allPastBookings = jpaBookingRepository.findAllPastOwnerBookings(owner.getId());
+        Page<BookingDto> allPastBookings = jpaBookingRepository.findAllPastOwnerBookings(owner.getId(), PageRequest.of(0, 5));
 
-        assertThat(allPastBookings.size(), equalTo(1));
-        assertThat(allPastBookings.get(0), equalTo(bookingDto));
+        assertThat(allPastBookings.getSize(), equalTo(5));
+        assertThat(allPastBookings.getNumberOfElements(), equalTo(1));
     }
 
     @Test
@@ -213,18 +215,18 @@ class JpaBookingRepositoryTest {
 
         testEntityManager.persist(bookingDto);
 
-        List<BookingDto> allCurrentBookings = jpaBookingRepository.findAllCurrentOwnerBookings(owner.getId());
+        Page<BookingDto> allCurrentBookings = jpaBookingRepository.findAllCurrentOwnerBookings(owner.getId(), PageRequest.of(0, 5));
 
-        assertThat(allCurrentBookings.size(), equalTo(1));
-        assertThat(allCurrentBookings.get(0), equalTo(bookingDto));
+        assertThat(allCurrentBookings.getSize(), equalTo(5));
+        assertThat(allCurrentBookings.getNumberOfElements(), equalTo(1));
     }
 
     @Test
     void testFindAllByOwnerId() {
-        List<BookingDto> bookings = jpaBookingRepository.findAllByOwnerId(owner.getId());
+        Page<BookingDto> bookings = jpaBookingRepository.findAllByOwnerId(owner.getId(), PageRequest.of(0, 5));
 
-        assertThat(bookings.size(), equalTo(1));
-        assertThat(bookings.get(0), equalTo(bookingDto));
+        assertThat(bookings.getSize(), equalTo(5));
+        assertThat(bookings.getNumberOfElements(), equalTo(1));
     }
 
     @Test
@@ -241,18 +243,18 @@ class JpaBookingRepositoryTest {
 
         testEntityManager.persist(bookingDto);
 
-        List<BookingDto> allFutureBookings = jpaBookingRepository.findAllFutureOwnerBookings(owner.getId());
+        Page<BookingDto> allFutureBookings = jpaBookingRepository.findAllFutureOwnerBookings(owner.getId(), PageRequest.of(0, 5));
 
-        assertThat(allFutureBookings.size(), equalTo(1));
-        assertThat(allFutureBookings.get(0), equalTo(bookingDto));
+        assertThat(allFutureBookings.getSize(), equalTo(5));
+        assertThat(allFutureBookings.getNumberOfElements(), equalTo(1));
     }
 
     @Test
     void testFindAllWaitingOwnerBookings() {
-        List<BookingDto> allWaitingBookings = jpaBookingRepository.findAllWaitingOwnerBookings(owner.getId());
+        Page<BookingDto> allWaitingBookings = jpaBookingRepository.findAllWaitingOwnerBookings(owner.getId(), PageRequest.of(0, 5));
 
-        assertThat(allWaitingBookings.size(), equalTo(1));
-        assertThat(allWaitingBookings.get(0), equalTo(bookingDto));
+        assertThat(allWaitingBookings.getSize(), equalTo(5));
+        assertThat(allWaitingBookings.getNumberOfElements(), equalTo(1));
     }
 
     @Test
@@ -269,10 +271,10 @@ class JpaBookingRepositoryTest {
 
         testEntityManager.persist(bookingDto);
 
-        List<BookingDto> allRejectedBookings = jpaBookingRepository.findAllRejectedOwnerBookings(owner.getId());
+        Page<BookingDto> allRejectedBookings = jpaBookingRepository.findAllRejectedOwnerBookings(owner.getId(), PageRequest.of(0, 5));
 
-        assertThat(allRejectedBookings.size(), equalTo(1));
-        assertThat(allRejectedBookings.get(0), equalTo(bookingDto));
+        assertThat(allRejectedBookings.getSize(), equalTo(5));
+        assertThat(allRejectedBookings.getNumberOfElements(), equalTo(1));
     }
 
     @Test

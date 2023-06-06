@@ -201,48 +201,31 @@ class BookingServiceImplTest {
     @Test
     void testGetWaitingBookingsByUserId() {
         when(bookingRepository.getWaitingBookingsByUserId(anyLong(), any())).thenReturn(new PageImpl<>(List.of(bookingDto)));
-        when(bookingRepository.getWaitingBookingsByUserId(anyLong())).thenReturn(List.of(bookingDto));
 
         List<Booking> bookingsByUserIdPage = bookingService.getBookingsByUserId(2L, BookingState.WAITING, 0, 5);
-        List<Booking> bookingsByUserId = bookingService.getBookingsByUserId(2L, BookingState.WAITING, null, null);
-
-        assertThat(bookingsByUserId.size(), equalTo(1));
-        assertThat(bookingsByUserId.get(0).getId(), equalTo(1L));
-        assertThat(bookingsByUserId.get(0).getBooker().getId(), equalTo(2L));
-        assertThat(bookingsByUserId.get(0).getStatus(), equalTo(BookingStatus.WAITING));
 
         assertThat(bookingsByUserIdPage.size(), equalTo(1));
         assertThat(bookingsByUserIdPage.get(0).getId(), equalTo(1L));
         assertThat(bookingsByUserIdPage.get(0).getBooker().getId(), equalTo(2L));
         assertThat(bookingsByUserIdPage.get(0).getStatus(), equalTo(BookingStatus.WAITING));
 
-        verify(userRepository, times(3)).getUserById(2L);
+        verify(userRepository, times(2)).getUserById(2L);
         verify(bookingRepository, times(1)).getWaitingBookingsByUserId(anyLong(), any());
-        verify(bookingRepository, times(1)).getWaitingBookingsByUserId(anyLong());
     }
 
     @Test
     void testGetWaitingBookingsByOwnerId() {
         when(bookingRepository.getWaitingBookingsByOwnerId(anyLong(), any())).thenReturn(new PageImpl<>(List.of(bookingDto)));
-        when(bookingRepository.getWaitingBookingsByOwnerId(anyLong())).thenReturn(List.of(bookingDto));
 
         List<Booking> bookingsByOwnerIdPage = bookingService.getBookingsByOwnerId(1L, BookingState.WAITING, 0, 5);
-
-        List<Booking> bookingsByOwnerId = bookingService.getBookingsByOwnerId(1L, BookingState.WAITING, null, null);
-
-        assertThat(bookingsByOwnerId.size(), equalTo(1));
-        assertThat(bookingsByOwnerId.get(0).getId(), equalTo(1L));
-        assertThat(bookingsByOwnerId.get(0).getItem().getOwner().getId(), equalTo(1L));
-        assertThat(bookingsByOwnerId.get(0).getStatus(), equalTo(BookingStatus.WAITING));
 
         assertThat(bookingsByOwnerIdPage.size(), equalTo(1));
         assertThat(bookingsByOwnerIdPage.get(0).getId(), equalTo(1L));
         assertThat(bookingsByOwnerIdPage.get(0).getItem().getOwner().getId(), equalTo(1L));
         assertThat(bookingsByOwnerIdPage.get(0).getStatus(), equalTo(BookingStatus.WAITING));
 
-        verify(userRepository, times(2)).getUserById(1L);
+        verify(userRepository, times(1)).getUserById(1L);
         verify(bookingRepository, times(1)).getWaitingBookingsByOwnerId(anyLong(), any());
-        verify(bookingRepository, times(1)).getWaitingBookingsByOwnerId(anyLong());
     }
 
     @Test
@@ -255,24 +238,16 @@ class BookingServiceImplTest {
         bookingDto.setEndDate(endDate);
 
         when(bookingRepository.getRejectedBookingsByUserId(anyLong(), any())).thenReturn(new PageImpl<>(List.of(bookingDto)));
-        when(bookingRepository.getRejectedBookingsByUserId(anyLong())).thenReturn(List.of(bookingDto));
 
         List<Booking> bookingsByUserIdPage = bookingService.getBookingsByUserId(2L, BookingState.REJECTED, 0, 5);
-        List<Booking> bookingsByUserId = bookingService.getBookingsByUserId(2L, BookingState.REJECTED, null, null);
 
         assertThat(bookingsByUserIdPage.size(), equalTo(1));
         assertThat(bookingsByUserIdPage.get(0).getId(), equalTo(bookingDto.getId()));
         assertThat(bookingsByUserIdPage.get(0).getBooker().getId(), equalTo(bookingDto.getBooker().getId()));
         assertThat(bookingsByUserIdPage.get(0).getStatus(), equalTo(BookingStatus.REJECTED));
 
-        assertThat(bookingsByUserId.size(), equalTo(1));
-        assertThat(bookingsByUserId.get(0).getId(), equalTo(bookingDto.getId()));
-        assertThat(bookingsByUserId.get(0).getBooker().getId(), equalTo(bookingDto.getBooker().getId()));
-        assertThat(bookingsByUserId.get(0).getStatus(), equalTo(BookingStatus.REJECTED));
-
-        verify(userRepository, times(3)).getUserById(2L);
+        verify(userRepository, times(2)).getUserById(2L);
         verify(bookingRepository, times(1)).getRejectedBookingsByUserId(anyLong(), any());
-        verify(bookingRepository, times(1)).getRejectedBookingsByUserId(anyLong());
     }
 
     @Test
@@ -285,24 +260,16 @@ class BookingServiceImplTest {
         bookingDto.setEndDate(endDate);
 
         when(bookingRepository.getRejectedBookingsByOwnerId(anyLong(), any())).thenReturn(new PageImpl<>(List.of(bookingDto)));
-        when(bookingRepository.getRejectedBookingsByOwnerId(anyLong())).thenReturn(List.of(bookingDto));
 
         List<Booking> bookingsByUserIdPage = bookingService.getBookingsByOwnerId(1L, BookingState.REJECTED, 0, 5);
-        List<Booking> bookingsByUserId = bookingService.getBookingsByOwnerId(1L, BookingState.REJECTED, null, null);
-
-        assertThat(bookingsByUserId.size(), equalTo(1));
-        assertThat(bookingsByUserId.get(0).getId(), equalTo(bookingDto.getId()));
-        assertThat(bookingsByUserId.get(0).getItem().getOwner().getId(), equalTo(bookingDto.getItem().getOwner().getId()));
-        assertThat(bookingsByUserId.get(0).getStatus(), equalTo(BookingStatus.REJECTED));
 
         assertThat(bookingsByUserIdPage.size(), equalTo(1));
         assertThat(bookingsByUserIdPage.get(0).getId(), equalTo(bookingDto.getId()));
         assertThat(bookingsByUserIdPage.get(0).getItem().getOwner().getId(), equalTo(bookingDto.getItem().getOwner().getId()));
         assertThat(bookingsByUserIdPage.get(0).getStatus(), equalTo(BookingStatus.REJECTED));
 
-        verify(userRepository, times(2)).getUserById(1L);
+        verify(userRepository, times(1)).getUserById(1L);
         verify(bookingRepository, times(1)).getRejectedBookingsByOwnerId(anyLong(), any());
-        verify(bookingRepository, times(1)).getRejectedBookingsByOwnerId(anyLong());
     }
 
     @Test
@@ -318,25 +285,15 @@ class BookingServiceImplTest {
 
         when(bookingRepository.getPastBookingsByUserId(anyLong(), any())).thenReturn(new PageImpl<>(List.of(bookingDto)));
 
-        when(bookingRepository.getPastBookingsByUserId(anyLong())).thenReturn(List.of(bookingDto));
-
-        List<Booking> bookingsByUserId = bookingService.getBookingsByUserId(2L, BookingState.PAST, null, null);
-
         List<Booking> bookingsByUserIdPage = bookingService.getBookingsByUserId(2L, BookingState.PAST, 0, 5);
-
-        assertThat(bookingsByUserId.size(), equalTo(1));
-        assertThat(bookingsByUserId.get(0).getId(), equalTo(bookingDto.getId()));
-        assertThat(bookingsByUserId.get(0).getBooker().getId(), equalTo(bookingDto.getBooker().getId()));
-        assertThat(bookingsByUserId.get(0).getStatus(), equalTo(BookingStatus.REJECTED));
 
         assertThat(bookingsByUserIdPage.size(), equalTo(1));
         assertThat(bookingsByUserIdPage.get(0).getId(), equalTo(bookingDto.getId()));
         assertThat(bookingsByUserIdPage.get(0).getBooker().getId(), equalTo(bookingDto.getBooker().getId()));
         assertThat(bookingsByUserIdPage.get(0).getStatus(), equalTo(BookingStatus.REJECTED));
 
-        verify(userRepository, times(3)).getUserById(2L);
+        verify(userRepository, times(2)).getUserById(2L);
         verify(bookingRepository, times(1)).getPastBookingsByUserId(anyLong(), any());
-        verify(bookingRepository, times(1)).getPastBookingsByUserId(anyLong());
     }
 
     @Test
@@ -351,24 +308,16 @@ class BookingServiceImplTest {
         bookingDto.setEndDate(endDate);
 
         when(bookingRepository.getPastBookingsByOwnerId(anyLong(), any())).thenReturn(new PageImpl<>(List.of(bookingDto)));
-        when(bookingRepository.getPastBookingsByOwnerId(anyLong())).thenReturn(List.of(bookingDto));
 
         List<Booking> bookingsByUserIdPage = bookingService.getBookingsByOwnerId(1L, BookingState.PAST, 0, 5);
-        List<Booking> bookingsByUserId = bookingService.getBookingsByOwnerId(1L, BookingState.PAST, null, null);
-
-        assertThat(bookingsByUserId.size(), equalTo(1));
-        assertThat(bookingsByUserId.get(0).getId(), equalTo(bookingDto.getId()));
-        assertThat(bookingsByUserId.get(0).getItem().getOwner().getId(), equalTo(bookingDto.getItem().getOwner().getId()));
-        assertThat(bookingsByUserId.get(0).getStatus(), equalTo(BookingStatus.REJECTED));
 
         assertThat(bookingsByUserIdPage.size(), equalTo(1));
         assertThat(bookingsByUserIdPage.get(0).getId(), equalTo(bookingDto.getId()));
         assertThat(bookingsByUserIdPage.get(0).getItem().getOwner().getId(), equalTo(bookingDto.getItem().getOwner().getId()));
         assertThat(bookingsByUserIdPage.get(0).getStatus(), equalTo(BookingStatus.REJECTED));
 
-        verify(userRepository, times(2)).getUserById(1L);
+        verify(userRepository, times(1)).getUserById(1L);
         verify(bookingRepository, times(1)).getPastBookingsByOwnerId(anyLong(), any());
-        verify(bookingRepository, times(1)).getPastBookingsByOwnerId(anyLong());
     }
 
     @Test
@@ -383,24 +332,16 @@ class BookingServiceImplTest {
         bookingDto.setEndDate(endDate);
 
         when(bookingRepository.getCurrentBookingsByUserId(anyLong(), any())).thenReturn(new PageImpl<>(List.of(bookingDto)));
-        when(bookingRepository.getCurrentBookingsByUserId(anyLong())).thenReturn(List.of(bookingDto));
 
         List<Booking> bookingsByUserIdPage = bookingService.getBookingsByUserId(2L, BookingState.CURRENT, 0, 5);
-        List<Booking> bookingsByUserId = bookingService.getBookingsByUserId(2L, BookingState.CURRENT, null, null);
-
-        assertThat(bookingsByUserId.size(), equalTo(1));
-        assertThat(bookingsByUserId.get(0).getId(), equalTo(bookingDto.getId()));
-        assertThat(bookingsByUserId.get(0).getBooker().getId(), equalTo(bookingDto.getBooker().getId()));
-        assertThat(bookingsByUserId.get(0).getStatus(), equalTo(BookingStatus.REJECTED));
 
         assertThat(bookingsByUserIdPage.size(), equalTo(1));
         assertThat(bookingsByUserIdPage.get(0).getId(), equalTo(bookingDto.getId()));
         assertThat(bookingsByUserIdPage.get(0).getBooker().getId(), equalTo(bookingDto.getBooker().getId()));
         assertThat(bookingsByUserIdPage.get(0).getStatus(), equalTo(BookingStatus.REJECTED));
 
-        verify(userRepository, times(3)).getUserById(2L);
+        verify(userRepository, times(2)).getUserById(2L);
         verify(bookingRepository, times(1)).getCurrentBookingsByUserId(anyLong(), any());
-        verify(bookingRepository, times(1)).getCurrentBookingsByUserId(anyLong());
     }
 
     @Test
@@ -415,24 +356,16 @@ class BookingServiceImplTest {
         bookingDto.setEndDate(endDate);
 
         when(bookingRepository.getCurrentBookingsByOwnerId(anyLong(), any())).thenReturn(new PageImpl<>(List.of(bookingDto)));
-        when(bookingRepository.getCurrentBookingsByOwnerId(anyLong())).thenReturn(List.of(bookingDto));
 
         List<Booking> bookingsByUserIdPage = bookingService.getBookingsByOwnerId(1L, BookingState.CURRENT, 0, 5);
-        List<Booking> bookingsByUserId = bookingService.getBookingsByOwnerId(1L, BookingState.CURRENT, null, null);
-
-        assertThat(bookingsByUserId.size(), equalTo(1));
-        assertThat(bookingsByUserId.get(0).getId(), equalTo(bookingDto.getId()));
-        assertThat(bookingsByUserId.get(0).getItem().getOwner().getId(), equalTo(bookingDto.getItem().getOwner().getId()));
-        assertThat(bookingsByUserId.get(0).getStatus(), equalTo(BookingStatus.REJECTED));
 
         assertThat(bookingsByUserIdPage.size(), equalTo(1));
         assertThat(bookingsByUserIdPage.get(0).getId(), equalTo(bookingDto.getId()));
         assertThat(bookingsByUserIdPage.get(0).getItem().getOwner().getId(), equalTo(bookingDto.getItem().getOwner().getId()));
         assertThat(bookingsByUserIdPage.get(0).getStatus(), equalTo(BookingStatus.REJECTED));
 
-        verify(userRepository, times(2)).getUserById(1L);
+        verify(userRepository, times(1)).getUserById(1L);
         verify(bookingRepository, times(1)).getCurrentBookingsByOwnerId(anyLong(), any());
-        verify(bookingRepository, times(1)).getCurrentBookingsByOwnerId(anyLong());
     }
 
     @Test
@@ -448,24 +381,16 @@ class BookingServiceImplTest {
 
         when(bookingRepository.getFutureBookingsByUserId(anyLong(), any())).thenReturn(new PageImpl<>(List.of(bookingDto)));
 
-        when(bookingRepository.getFutureBookingsByUserId(anyLong())).thenReturn(List.of(bookingDto));
 
         List<Booking> bookingsByUserIdPage = bookingService.getBookingsByUserId(2L, BookingState.FUTURE, 0, 5);
-        List<Booking> bookingsByUserId = bookingService.getBookingsByUserId(2L, BookingState.FUTURE, null, null);
-
-        assertThat(bookingsByUserId.size(), equalTo(1));
-        assertThat(bookingsByUserId.get(0).getId(), equalTo(bookingDto.getId()));
-        assertThat(bookingsByUserId.get(0).getBooker().getId(), equalTo(bookingDto.getBooker().getId()));
-        assertThat(bookingsByUserId.get(0).getStatus(), equalTo(BookingStatus.REJECTED));
 
         assertThat(bookingsByUserIdPage.size(), equalTo(1));
         assertThat(bookingsByUserIdPage.get(0).getId(), equalTo(bookingDto.getId()));
         assertThat(bookingsByUserIdPage.get(0).getBooker().getId(), equalTo(bookingDto.getBooker().getId()));
         assertThat(bookingsByUserIdPage.get(0).getStatus(), equalTo(BookingStatus.REJECTED));
 
-        verify(userRepository, times(3)).getUserById(2L);
+        verify(userRepository, times(2)).getUserById(2L);
         verify(bookingRepository, times(1)).getFutureBookingsByUserId(anyLong(), any());
-        verify(bookingRepository, times(1)).getFutureBookingsByUserId(anyLong());
     }
 
     @Test
@@ -480,34 +405,23 @@ class BookingServiceImplTest {
         bookingDto.setEndDate(endDate);
 
         when(bookingRepository.getFutureBookingsByOwnerId(anyLong(), any())).thenReturn(new PageImpl<>(List.of(bookingDto)));
-        when(bookingRepository.getFutureBookingsByOwnerId(anyLong())).thenReturn(List.of(bookingDto));
-
 
         List<Booking> bookingsByUserIdPage = bookingService.getBookingsByOwnerId(1L, BookingState.FUTURE, 0, 5);
-        List<Booking> bookingsByUserId = bookingService.getBookingsByOwnerId(1L, BookingState.FUTURE, null, null);
-
-        assertThat(bookingsByUserId.size(), equalTo(1));
-        assertThat(bookingsByUserId.get(0).getId(), equalTo(bookingDto.getId()));
-        assertThat(bookingsByUserId.get(0).getItem().getOwner().getId(), equalTo(bookingDto.getItem().getOwner().getId()));
-        assertThat(bookingsByUserId.get(0).getStatus(), equalTo(BookingStatus.REJECTED));
 
         assertThat(bookingsByUserIdPage.size(), equalTo(1));
         assertThat(bookingsByUserIdPage.get(0).getId(), equalTo(bookingDto.getId()));
         assertThat(bookingsByUserIdPage.get(0).getItem().getOwner().getId(), equalTo(bookingDto.getItem().getOwner().getId()));
         assertThat(bookingsByUserIdPage.get(0).getStatus(), equalTo(BookingStatus.REJECTED));
 
-        verify(userRepository, times(2)).getUserById(1L);
+        verify(userRepository, times(1)).getUserById(1L);
         verify(bookingRepository, times(1)).getFutureBookingsByOwnerId(anyLong(), any());
-        verify(bookingRepository, times(1)).getFutureBookingsByOwnerId(anyLong());
     }
 
     @Test
     void testGetBookingsByOwnerIdUnsupportedStatus() {
         assertThrows(UnsupportedStatusException.class,
-                () -> bookingService.getBookingsByOwnerId(1L, BookingState.UNSUPPORTED_STATUS, null, null));
-        assertThrows(UnsupportedStatusException.class,
                 () -> bookingService.getBookingsByOwnerId(1L, BookingState.UNSUPPORTED_STATUS, 0, 5));
 
-        verify(userRepository, times(2)).getUserById(1L);
+        verify(userRepository, times(1)).getUserById(1L);
     }
 }

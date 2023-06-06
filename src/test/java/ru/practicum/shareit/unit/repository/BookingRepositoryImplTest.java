@@ -42,7 +42,6 @@ class BookingRepositoryImplTest {
     private UserDto userDto;
     private ItemDto itemDto;
     private BookingDto bookingDto;
-    private BookingDto bookingDtoApproved;
 
     @BeforeEach
     void setUp() {
@@ -69,14 +68,6 @@ class BookingRepositoryImplTest {
         bookingDto.setBooker(userDto);
         bookingDto.setStartDate(startDate);
         bookingDto.setEndDate(endDate);
-
-        bookingDtoApproved = new BookingDto();
-        bookingDtoApproved.setId(1L);
-        bookingDtoApproved.setStatus(BookingStatus.APPROVED);
-        bookingDtoApproved.setItem(itemDto);
-        bookingDtoApproved.setBooker(userDto);
-        bookingDtoApproved.setStartDate(startDate);
-        bookingDtoApproved.setEndDate(endDate);
     }
 
     @Test
@@ -103,20 +94,6 @@ class BookingRepositoryImplTest {
         assertThat(pastBookingsByOwnerId.getSize(), equalTo(1));
     }
 
-    @Test
-    void testGetPastBookingsByOwnerId() {
-        startDate = LocalDateTime.now().minusDays(3);
-        endDate = LocalDateTime.now().minusDays(1);
-        bookingDto.setStartDate(startDate);
-        bookingDto.setEndDate(endDate);
-
-        when(jpaBookingRepository.findAllPastOwnerBookings(anyLong())).thenReturn(List.of(bookingDto));
-
-        List<BookingDto> bookings = bookingRepository.getPastBookingsByOwnerId(ownerDto.getId());
-
-        assertThat(bookings.size(), equalTo(1));
-        assertThat(bookings.get(0), equalTo(bookingDto));
-    }
 
     @Test
     void testGetCurrentBookingsByOwnerIdPageable() {
@@ -133,21 +110,6 @@ class BookingRepositoryImplTest {
     }
 
     @Test
-    void testGetCurrentBookingsByOwnerId() {
-        startDate = LocalDateTime.now().minusDays(1);
-        endDate = LocalDateTime.now().plusDays(3);
-        bookingDto.setStartDate(startDate);
-        bookingDto.setEndDate(endDate);
-
-        when(jpaBookingRepository.findAllCurrentOwnerBookings(anyLong())).thenReturn(List.of(bookingDto));
-
-        List<BookingDto> bookings = bookingRepository.getCurrentBookingsByOwnerId(ownerDto.getId());
-
-        assertThat(bookings.size(), equalTo(1));
-        assertThat(bookings.get(0), equalTo(bookingDto));
-    }
-
-    @Test
     void testGetFutureBookingsByOwnerIdPageable() {
         startDate = LocalDateTime.now().plusDays(1);
         endDate = LocalDateTime.now().plusDays(3);
@@ -161,20 +123,6 @@ class BookingRepositoryImplTest {
         assertThat(bookings.getSize(), equalTo(1));
     }
 
-    @Test
-    void testGetFutureBookingsByOwnerId() {
-        startDate = LocalDateTime.now().plusDays(1);
-        endDate = LocalDateTime.now().plusDays(3);
-        bookingDto.setStartDate(startDate);
-        bookingDto.setEndDate(endDate);
-
-        when(jpaBookingRepository.findAllFutureOwnerBookings(anyLong())).thenReturn(List.of(bookingDto));
-
-        List<BookingDto> bookings = bookingRepository.getFutureBookingsByOwnerId(ownerDto.getId());
-
-        assertThat(bookings.size(), equalTo(1));
-        assertThat(bookings.get(0), equalTo(bookingDto));
-    }
 
     @Test
     void testGetWaitingBookingsByOwnerIdPageable() {
@@ -185,15 +133,6 @@ class BookingRepositoryImplTest {
         assertThat(bookings.getSize(), equalTo(1));
     }
 
-    @Test
-    void testGetWaitingBookingsByOwnerId() {
-        when(jpaBookingRepository.findAllWaitingOwnerBookings(anyLong())).thenReturn(List.of(bookingDto));
-
-        List<BookingDto> bookings = bookingRepository.getWaitingBookingsByOwnerId(ownerDto.getId());
-
-        assertThat(bookings.size(), equalTo(1));
-        assertThat(bookings.get(0), equalTo(bookingDto));
-    }
 
     @Test
     void testGetRejectedBookingsByOwnerIdPageable() {
@@ -206,17 +145,6 @@ class BookingRepositoryImplTest {
         assertThat(bookings.getSize(), equalTo(1));
     }
 
-    @Test
-    void testGetRejectedBookingsByOwnerId() {
-        bookingDto.setStatus(BookingStatus.REJECTED);
-
-        when(jpaBookingRepository.findAllRejectedOwnerBookings(anyLong())).thenReturn(List.of(bookingDto));
-
-        List<BookingDto> bookings = bookingRepository.getRejectedBookingsByOwnerId(ownerDto.getId());
-
-        assertThat(bookings.size(), equalTo(1));
-        assertThat(bookings.get(0), equalTo(bookingDto));
-    }
 
     @Test
     void testGetPastBookingsByUserIdPageable() {
@@ -233,21 +161,6 @@ class BookingRepositoryImplTest {
     }
 
     @Test
-    void testGetPastBookingsByUserId() {
-        startDate = LocalDateTime.now().minusDays(2);
-        endDate = LocalDateTime.now().minusDays(1);
-        bookingDto.setStartDate(startDate);
-        bookingDto.setEndDate(endDate);
-
-        when(jpaBookingRepository.findAllPastBookings(anyLong())).thenReturn(List.of(bookingDto));
-
-        List<BookingDto> bookings = bookingRepository.getPastBookingsByUserId(userDto.getId());
-
-        assertThat(bookings.size(), equalTo(1));
-        assertThat(bookings.get(0), equalTo(bookingDto));
-    }
-
-    @Test
     void testGetCurrentBookingsByUserIdPageable() {
         startDate = LocalDateTime.now().minusDays(2);
         endDate = LocalDateTime.now().plusDays(4);
@@ -261,20 +174,6 @@ class BookingRepositoryImplTest {
         assertThat(bookings.getSize(), equalTo(1));
     }
 
-    @Test
-    void testGetCurrentBookingsByUserId() {
-        startDate = LocalDateTime.now().minusDays(2);
-        endDate = LocalDateTime.now().plusDays(4);
-        bookingDto.setStartDate(startDate);
-        bookingDto.setEndDate(endDate);
-
-        when(jpaBookingRepository.findAllCurrentBookings(anyLong())).thenReturn(List.of(bookingDto));
-
-        List<BookingDto> bookings = bookingRepository.getCurrentBookingsByUserId(userDto.getId());
-
-        assertThat(bookings.size(), equalTo(1));
-        assertThat(bookings.get(0), equalTo(bookingDto));
-    }
 
     @Test
     void testGetFutureBookingsByUserIdPageable() {
@@ -290,20 +189,6 @@ class BookingRepositoryImplTest {
         assertThat(bookings.getSize(), equalTo(1));
     }
 
-    @Test
-    void testGetFutureBookingsByUserId() {
-        startDate = LocalDateTime.now().plusDays(2);
-        endDate = LocalDateTime.now().plusDays(4);
-        bookingDto.setStartDate(startDate);
-        bookingDto.setEndDate(endDate);
-
-        when(jpaBookingRepository.findAllFutureBookings(anyLong())).thenReturn(List.of(bookingDto));
-
-        List<BookingDto> bookings = bookingRepository.getFutureBookingsByUserId(userDto.getId());
-
-        assertThat(bookings.size(), equalTo(1));
-        assertThat(bookings.get(0), equalTo(bookingDto));
-    }
 
     @Test
     void testGetWaitingBookingsByUserIdPageable() {
@@ -314,15 +199,6 @@ class BookingRepositoryImplTest {
         assertThat(bookings.getSize(), equalTo(1));
     }
 
-    @Test
-    void testGetWaitingBookingsByUserId() {
-        when(jpaBookingRepository.findAllWaitingBookings(anyLong())).thenReturn(List.of(bookingDto));
-
-        List<BookingDto> bookings = bookingRepository.getWaitingBookingsByUserId(userDto.getId());
-
-        assertThat(bookings.size(), equalTo(1));
-        assertThat(bookings.get(0), equalTo(bookingDto));
-    }
 
     @Test
     void testGetRejectedBookingsByUserIdPageable() {
@@ -334,16 +210,6 @@ class BookingRepositoryImplTest {
         assertThat(bookings.getSize(), equalTo(1));
     }
 
-    @Test
-    void testGetRejectedBookingsByUserId() {
-        bookingDto.setStatus(BookingStatus.REJECTED);
-        when(jpaBookingRepository.findAllRejectedBookings(anyLong())).thenReturn(List.of(bookingDto));
-
-        List<BookingDto> bookings = bookingRepository.getRejectedBookingsByUserId(userDto.getId());
-
-        assertThat(bookings.size(), equalTo(1));
-        assertThat(bookings.get(0), equalTo(bookingDto));
-    }
 
     @Test
     void testGetApprovedBookingsByItemId() {
@@ -356,15 +222,6 @@ class BookingRepositoryImplTest {
         assertThat(bookings.get(0), equalTo(bookingDto));
     }
 
-    @Test
-    void testGetAllBookingsByUserId() {
-        when(jpaBookingRepository.findAllByBookerId(anyLong())).thenReturn(List.of(bookingDto));
-
-        List<BookingDto> bookings = bookingRepository.getAllBookingsByUserId(userDto.getId());
-
-        assertThat(bookings.size(), equalTo(1));
-        assertThat(bookings.get(0), equalTo(bookingDto));
-    }
 
     @Test
     void testGetAllBookingsByUserIdPageable() {

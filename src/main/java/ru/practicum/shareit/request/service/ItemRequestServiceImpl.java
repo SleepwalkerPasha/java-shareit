@@ -57,17 +57,10 @@ public class ItemRequestServiceImpl implements ItemRequestService {
         checkForUser(userId);
         List<ItemRequest> itemRequests;
         Pageable pageable = ItemServiceImpl.PageRequester.of(from, size, Sort.by("created").descending());
-        if (pageable != null) {
-            itemRequests = itemRequestRepository.getAllRequests(userId, pageable)
-                    .stream()
-                    .map(ItemReqMapper::toItemRequest)
-                    .collect(Collectors.toList());
-        } else {
-            itemRequests = itemRequestRepository.getAllRequests(userId)
-                    .stream()
-                    .map(ItemReqMapper::toItemRequest)
-                    .collect(Collectors.toList());
-        }
+        itemRequests = itemRequestRepository.getAllRequests(userId, pageable)
+                .stream()
+                .map(ItemReqMapper::toItemRequest)
+                .collect(Collectors.toList());
         setItemsForItemRequest(itemRequests);
         return itemRequests;
     }

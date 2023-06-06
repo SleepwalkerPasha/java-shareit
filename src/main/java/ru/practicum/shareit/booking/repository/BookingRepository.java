@@ -43,32 +43,6 @@ public interface BookingRepository {
 
     Page<BookingDto> getRejectedBookingsByUserId(long userId, Pageable pageable);
 
-    ///////////////////////////////////////////////////////////////////////////
-
-    List<BookingDto> getPastBookingsByOwnerId(long ownerId);
-
-    List<BookingDto> getCurrentBookingsByOwnerId(long ownerId);
-
-    List<BookingDto> getAllBookingsByOwnerId(long ownerId);
-
-    List<BookingDto> getFutureBookingsByOwnerId(long ownerId);
-
-    List<BookingDto> getWaitingBookingsByOwnerId(long ownerId);
-
-    List<BookingDto> getRejectedBookingsByOwnerId(long ownerId);
-
-    List<BookingDto> getPastBookingsByUserId(long userId);
-
-    List<BookingDto> getCurrentBookingsByUserId(long userId);
-
-    List<BookingDto> getAllBookingsByUserId(long userId);
-
-    List<BookingDto> getFutureBookingsByUserId(long userId);
-
-    List<BookingDto> getWaitingBookingsByUserId(long userId);
-
-    List<BookingDto> getRejectedBookingsByUserId(long userId);
-
     List<BookingDto> getApprovedBookingsByItemId(long itemId);
 
     List<BookingDto> getApprovedBookingsInItems(List<Long> itemIds);
